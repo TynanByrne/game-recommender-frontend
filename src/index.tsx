@@ -4,6 +4,7 @@ import App from './App';
 import {
   ApolloClient, ApolloProvider, HttpLink, InMemoryCache
 } from '@apollo/client'
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -14,9 +15,11 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
+    <Router>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );

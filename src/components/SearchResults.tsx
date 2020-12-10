@@ -1,23 +1,17 @@
-import { useQuery } from '@apollo/client'
 import React from 'react'
 import { useHistory } from 'react-router'
-import { SEARCH_GAMES } from '../graphql/queries'
-import { SearchedGames, SearchedGamesData } from './Searchbar'
+import { SearchedGames, SearchedGamesData } from '../types'
 
-interface SearchedGamesVars {
-  searchTerm: string
-}
-
-const SearchResults: React.FC<{search: string}> = ({ search }) => {
+const SearchResults: React.FC<{ gamesData: SearchedGamesData | undefined }> = ({ gamesData }) => {
   const history = useHistory()
-  const { loading, data } = useQuery<SearchedGamesData, SearchedGamesVars>(
-    SEARCH_GAMES,
-    { variables: { searchTerm: search }}
-  )
-  if (!data) {
-    return null
+  if (!gamesData) {
+    return (
+      <div>
+        Loading...
+      </div>
+    )
   }
-  const games: SearchedGames = data.searchGames
+  const games: SearchedGames = gamesData.searchGames
   return (
     <>
       <button onClick={(): void => history.push('/')}>Go home</button>
