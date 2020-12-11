@@ -1,18 +1,10 @@
-import { useLazyQuery } from '@apollo/client'
 import React, { Dispatch } from 'react'
 import { useHistory } from 'react-router-dom'
-import { SEARCH_GAMES } from '../graphql/queries'
-import { SearchedGamesData, SearchedGamesVars } from '../types'
 
 const Searchbar: React.FC<{
   setSearch: Dispatch<string>,
-  search: string,
-  setGamesData: Dispatch<SearchedGamesData> }> = ({ setSearch, search, setGamesData }) => {
+  search: string }> = ({ setSearch, search }) => {
   const history = useHistory()
-  const [searchGames] = useLazyQuery<SearchedGamesData, SearchedGamesVars>(
-    SEARCH_GAMES,
-    { onCompleted: data => setGamesData(data) }
-  )
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
@@ -20,8 +12,9 @@ const Searchbar: React.FC<{
   }
 
   const handleSubmit = () => {
-    searchGames({ variables: { searchTerm: search } })
-    history.push('/games')
+    console.log('clicked')
+    history.push(`/games/${search}`)
+    setSearch('')
   }
 
   return (
