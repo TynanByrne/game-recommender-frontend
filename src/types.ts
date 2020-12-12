@@ -9,6 +9,10 @@ export interface SearchedGamesData {
   searchGames: SearchedGames
 }
 
+export interface NextSetData {
+  nextSet: SearchedGames
+}
+
 export interface SearchedGamesVars {
   searchTerm: string
 }
@@ -18,4 +22,8 @@ export interface GameDetails {
   name: string
   rating: number
   background_image: string
+}
+
+export interface NextSetVars {
+  url: string
 }

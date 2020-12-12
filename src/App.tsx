@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom'
 import Home from './components/Home';
 import Searchbar from './components/Searchbar'
 import SearchResults from './components/SearchResults';
 
 const App: React.FC = () => {
-  const [search, setSearch] = useState<string>('')
   return (
     <div>
-      <Searchbar setSearch={setSearch} search={search} />
+      <Searchbar />
       <Switch>
         <Route path='/games/:search'>
           <SearchResults />

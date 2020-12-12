@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client'
+import { GAME_BASICS } from '../fragments'
 
 export const SEARCH_GAMES = gql`
   query searchGames($searchTerm: String!) {
@@ -14,4 +15,16 @@ export const SEARCH_GAMES = gql`
       }
     }
   }
+`
+
+export const NEXT_SET = gql`
+  query nextSet($url: String!) {
+    nextSet(url: $url) {
+      count
+      next
+      previous
+      ...GameBasics
+    }
+  }
+  ${GAME_BASICS}
 `

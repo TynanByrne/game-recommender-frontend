@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const GAME_BASICS = gql`
-  fragment GameDetails on GamesResult {
+  fragment GameBasics on GamesResult {
     results {
       id
       name

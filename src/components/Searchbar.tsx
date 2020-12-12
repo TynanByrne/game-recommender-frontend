@@ -1,9 +1,8 @@
-import React, { Dispatch } from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
-const Searchbar: React.FC<{
-  setSearch: Dispatch<string>,
-  search: string }> = ({ setSearch, search }) => {
+const Searchbar: React.FC = () => {
+  const [search, setSearch] = useState<string>('')
   const history = useHistory()
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
