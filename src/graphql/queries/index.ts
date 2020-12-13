@@ -7,14 +7,10 @@ export const SEARCH_GAMES = gql`
       count
       next
       previous
-      results {
-        id
-        name
-        rating
-        background_image
-      }
+      ...GameBasics
     }
   }
+  ${GAME_BASICS}
 `
 
 export const NEXT_SET = gql`
@@ -27,4 +23,35 @@ export const NEXT_SET = gql`
     }
   }
   ${GAME_BASICS}
+`
+
+export const GET_SEARCHED_GAMES = gql`
+  query getSearchedGames {
+    searchedGames @client {
+      next
+      result {
+        id
+        name
+        rating
+        background_image
+      }
+    }
+  }
+`
+
+export const GET_EXTRA_GAMES = gql`
+  query getExtraGames {
+    extraGames @client {
+      id
+      name
+      slug
+      rating
+    }
+  }
+`
+
+export const GET_CURRENT_NEXT = gql`
+  query getCurrentNext {
+    currentNext @client
+  }
 `

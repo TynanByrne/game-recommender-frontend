@@ -10,10 +10,11 @@ export const GAME_BASICS = gql`
       rating
       metacritic
       released
-      parent_platforms {
-        name
-        id
-        slug
+      platforms {
+        platform {
+          name
+          id
+        }
       }
       genres {
         id

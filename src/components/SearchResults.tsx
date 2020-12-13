@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router'
-import { NEXT_SET, SEARCH_GAMES } from '../graphql/queries'
-import { GameDetails, NextSetData, NextSetVars, SearchedGamesData, SearchedGamesVars } from '../types'
+import { GET_CURRENT_NEXT, GET_EXTRA_GAMES, SEARCH_GAMES } from '../graphql/queries'
+import { GameDetails, SearchedGamesData, SearchedGamesVars, SearchedGames } from '../types'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useLazyQuery, useQuery } from '@apollo/client'
-import Axios from 'axios'
+import { useQuery } from '@apollo/client'
+import axios from 'axios'
+import { extraGamesVar, currentNextVar } from '../graphql/cache'
 
 const style = {
   border: "1px solid",
@@ -12,40 +13,49 @@ const style = {
   padding: 8
 }
 
+interface ExtraGamesData {
+  extraGames: GameDetails[]
+}
+
+interface CurrentNextData {
+  currentNext: string
+}
+
 const SearchResults: React.FC = () => {
   const { search } = useParams<{ search: string }>()
-  const [games, setGames] = useState<GameDetails[]>([])
-  const [nextLink, setNextLink] = useState<string>('')
-  console.log(search)
   const history = useHistory()
+  const [hasMore, setHasMore] = useState(true)
   const { loading, data } = useQuery<SearchedGamesData, SearchedGamesVars>(SEARCH_GAMES,
     { variables: { searchTerm: search } }
   )
+  const { loading: extraLoading, data: extraData } = useQuery<ExtraGamesData>(GET_EXTRA_GAMES)
+  const { loading: currentLoading, data: currentData } = useQuery<CurrentNextData>(GET_CURRENT_NEXT)
   useEffect(() => {
-    if (data) {
-      setGames(data.searchGames.results)
-      setNextLink(data.searchGames.next)
-    }
-
+    currentNextVar(data?.searchGames.next)
   }, [data])
-  const [fetchGames] = useLazyQuery<NextSetData, NextSetVars>(NEXT_SET, {
-    fetchPolicy: 'cache-and-network',
-    variables: { url: nextLink },
-    onCompleted: (data) => {
-      console.log("data is", data)
-      setGames(games.concat(data.nextSet.results))
-      setNextLink(data.nextSet.next)
-      console.log("GAMES ARE NOW", games)
-      console.log("NEXT LINK IS NOW", nextLink)
-    },
-  })
+
+  if (!loading && !data) {
+    return <div>Something went wrong!</div>
+  }
+
+  const extraGames = extraData ? extraData.extraGames : []
+  const games = data ? [...data.searchGames.results, ...extraGames] : []
+
 
   const fetchMore = async () => {
-    /* fetchGames({ variables: { url: nextLink } }) */
-    const { data } = await Axios.get<NextSetData>(nextLink)
-    setGames(games.concat(data.nextSet.results))
-    setNextLink(data.nextSet.next)
-    console.log("FETCHED")
+    if (!currentData?.currentNext) {
+      setHasMore(false)
+      return
+    }
+    try {
+      const { data } = await axios.get<SearchedGames>(currentNextVar())
+      console.log(data)
+      extraGamesVar([...extraGames, ...data.results])
+      currentNextVar(data.next)
+    } catch (error) {
+      console.error("COULD NOT FETCH")
+      console.log(error)
+    }
   }
 
   console.log("games are", games)
@@ -54,12 +64,16 @@ const SearchResults: React.FC = () => {
       <h1>Here are all the games that match that search</h1>
       <br />
       <button onClick={(): void => history.push('/')}>Go home</button>
-      {loading && <div>Loading...</div>}
       {games && <InfiniteScroll
         dataLength={games.length}
         next={fetchMore}
-        hasMore={true}
+        hasMore={hasMore}
         loader={<h3>Loading...</h3>}
+        endMessage={
+          <div>
+            <b>That is all, folks!</b>
+          </div>
+        }
       >
         {games.map(game => (
           <div style={style} key={game.id}>
