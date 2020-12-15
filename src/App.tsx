@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import Home from './components/Home';
 import Searchbar from './components/Searchbar'
 import SearchResults from './components/SearchResults';
+import SignUp from './components/SignUp';
 
 const App: React.FC = () => {
   return (
@@ -11,6 +12,9 @@ const App: React.FC = () => {
       <Switch>
         <Route path='/games/:search'>
           <SearchResults />
+        </Route>
+        <Route path='/signup'>
+          <SignUp />
         </Route>
         <Route path='/'>
           <Home />

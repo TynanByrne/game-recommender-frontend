@@ -13,32 +13,6 @@ export const SEARCH_GAMES = gql`
   ${GAME_BASICS}
 `
 
-export const NEXT_SET = gql`
-  query nextSet($url: String!) {
-    nextSet(url: $url) {
-      count
-      next
-      previous
-      ...GameBasics
-    }
-  }
-  ${GAME_BASICS}
-`
-
-export const GET_SEARCHED_GAMES = gql`
-  query getSearchedGames {
-    searchedGames @client {
-      next
-      result {
-        id
-        name
-        rating
-        background_image
-      }
-    }
-  }
-`
-
 export const GET_EXTRA_GAMES = gql`
   query getExtraGames {
     extraGames @client {

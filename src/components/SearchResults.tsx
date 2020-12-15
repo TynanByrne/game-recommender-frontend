@@ -28,8 +28,8 @@ const SearchResults: React.FC = () => {
   const { loading, data } = useQuery<SearchedGamesData, SearchedGamesVars>(SEARCH_GAMES,
     { variables: { searchTerm: search } }
   )
-  const { loading: extraLoading, data: extraData } = useQuery<ExtraGamesData>(GET_EXTRA_GAMES)
-  const { loading: currentLoading, data: currentData } = useQuery<CurrentNextData>(GET_CURRENT_NEXT)
+  const { data: extraData } = useQuery<ExtraGamesData>(GET_EXTRA_GAMES)
+  const { data: currentData } = useQuery<CurrentNextData>(GET_CURRENT_NEXT)
   useEffect(() => {
     currentNextVar(data?.searchGames.next)
   }, [data])
@@ -53,12 +53,10 @@ const SearchResults: React.FC = () => {
       extraGamesVar([...extraGames, ...data.results])
       currentNextVar(data.next)
     } catch (error) {
-      console.error("COULD NOT FETCH")
-      console.log(error)
+      console.error(error)
     }
   }
 
-  console.log("games are", games)
   return (
     <>
       <h1>Here are all the games that match that search</h1>
