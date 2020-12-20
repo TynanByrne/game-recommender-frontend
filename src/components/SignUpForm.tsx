@@ -1,40 +1,46 @@
 
-import { Button, TextField } from '@material-ui/core'
+import { Button, LinearProgress } from '@material-ui/core'
+import { TextField } from 'formik-material-ui'
+import { Field, Form } from 'formik'
 import React from 'react'
 
-const SignUpForm: React.FC<{ formik: any }> = ({ formik }) => {
+interface FormProps {
+  isSubmitting: boolean
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  submitForm: (() => Promise<void>) & (() => Promise<any>)
+}
+
+const SignUpForm: React.FC<FormProps> = ({ isSubmitting, submitForm }) => {
   return (
-    <>
-      <TextField
-        id='username'
+    <Form>
+      <Field
+        component={TextField}
+        type='text'
         name='username'
-        label='Username'
-        value={formik.values.username}
-        onChange={formik.handleChange}
-        error={formik.touched.username && Boolean(formik.errors.username)}
-      />
-      <TextField
-        id='password'
+        label='Username' />
+      <br />
+      <Field
+        component={TextField}
+        type='password'
         name='password'
-        label='Password'
+        label='Password' />
+      <br />
+      <Field
+        component={TextField}
         type='password'
-        value={formik.values.password}
-        onChange={formik.handleChange}
-        error={formik.touched.password && Boolean(formik.errors.password)}
-      />
-      <TextField
-        id='password-confirmation'
-        name='password-confirmation'
-        label='Password confirmation'
-        type='password'
-        value={formik.values.passwordConfirmation}
-        onChange={formik.handleChange}
-        error={formik.touched.passwordConfirmation && Boolean(formik.errors.passwordConfirmation)}
-      />
-      <Button color='primary' variant='contained' type='submit'>
+        name='passwordConfirmation'
+        label='Password confirmation' />
+      {isSubmitting && <LinearProgress />}
+      <br />
+      <Button 
+        color='primary'
+        variant='contained'
+        onClick={submitForm}
+        disabled={isSubmitting}
+      >
         Sign up
       </Button>
-    </>
+    </Form>
   )
 }
 
