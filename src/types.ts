@@ -27,3 +27,8 @@ export interface GameDetails {
 export interface NextSetVars {
   url: string
 }
+
+export interface User {
+  username: string
+  id: string
+}

@@ -1,6 +1,10 @@
+import { useMutation } from '@apollo/client'
 import { Formik } from 'formik'
 import React from 'react'
+import { useHistory } from 'react-router'
 import * as yup from 'yup'
+import { tokenVar } from '../graphql/cache'
+import { LOGIN, SIGN_UP } from '../graphql/mutations'
 import SignUpForm from './SignUpForm'
 
 
@@ -27,6 +31,7 @@ interface MyFormValues {
   passwordConfirmation: string
 }
 
+
 const initialValues: MyFormValues = {
   username: '',
   password: '',
@@ -34,6 +39,30 @@ const initialValues: MyFormValues = {
 }
 
 const SignUp: React.FC = () => {
+  const [signUp] = useMutation(SIGN_UP)
+  const [signIn] = useMutation(LOGIN)
+  const history = useHistory()
+  const signUpAndIn = async (username: string, password: string) => {
+    try {
+      const signUpData = await signUp({
+        variables: {
+          password,
+          username
+        }
+      })
+      console.log(signUpData)
+
+      if (signUpData.data.addUser) {
+        const result = await signIn({ variables: { username, password } })
+        const token = result.data.login.value
+        localStorage.setItem('user-token', token)
+        tokenVar(token)
+        history.push('/')
+      }
+    } catch (error) {
+      console.error(error.message)
+    }
+  } 
   return (
     <div>
       <h1>This is a form</h1>
@@ -42,6 +71,11 @@ const SignUp: React.FC = () => {
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting} ) => {
           const { username, password } = values
+          try {
+            signUpAndIn(username, password)
+          } catch (error) {
+            console.error(error)
+          }
           setSubmitting(false)
           console.log('Username is', username, ", password is", password)
         }}>

@@ -29,3 +29,12 @@ export const GET_CURRENT_NEXT = gql`
     currentNext @client
   }
 `
+
+export const ME = gql`
+  query me {
+    me {
+      username
+    }
+    loggedIn @client
+  }
+`
