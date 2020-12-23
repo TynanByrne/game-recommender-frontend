@@ -1,4 +1,6 @@
 import { useApolloClient, useQuery } from '@apollo/client'
+import { Typography } from '@material-ui/core'
+import { Alert, AlertTitle } from '@material-ui/lab'
 import React from 'react'
 import { useHistory } from 'react-router'
 import { tokenVar } from '../graphql/cache'
@@ -44,12 +46,14 @@ const Home: React.FC = () => {
       {!data?.loggedIn && signInButtons()}
       {data?.loggedIn && <button onClick={logOut}>Log out</button>}
       <div>
-        <h1>Hello, world!</h1>
+        <Typography variant='h2'>Hello, world!</Typography>
       </div>
       {data?.loggedIn && (
-        <div>
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        <Alert onClose={() => {}}>
+          <AlertTitle>Logged in</AlertTitle>
           Welcome back, {data.me.username}!
-        </div>
+        </Alert>
       )}
     </>
   )

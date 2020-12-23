@@ -1,3 +1,4 @@
+import { Button, TextField } from '@material-ui/core'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
@@ -18,8 +19,8 @@ const Searchbar: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      search game<input value={search} onChange={handleInputChange} />
-      <button type='submit'>submit</button>
+      <TextField value={search} onChange={handleInputChange} label='Search games' />
+      <Button type='submit' variant='contained'>Search</Button>
     </form>
   )
 }

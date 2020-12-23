@@ -6,12 +6,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { useQuery } from '@apollo/client'
 import axios from 'axios'
 import { extraGamesVar, currentNextVar } from '../graphql/cache'
-
-const style = {
-  border: "1px solid",
-  margin: 6,
-  padding: 8
-}
+import { Typography, Button, List, ListItemText, ListItem } from '@material-ui/core'
 
 interface ExtraGamesData {
   extraGames: GameDetails[]
@@ -59,9 +54,9 @@ const SearchResults: React.FC = () => {
 
   return (
     <>
-      <h1>Here are all the games that match that search</h1>
+      <Typography variant='h4'>Here are all the games that match that search</Typography>
       <br />
-      <button onClick={(): void => history.push('/')}>Go home</button>
+      <Button variant='contained' onClick={(): void => history.push('/')}>Go home</Button>
       {games && <InfiniteScroll
         dataLength={games.length}
         next={fetchMore}
@@ -73,12 +68,15 @@ const SearchResults: React.FC = () => {
           </div>
         }
       >
-        {games.map(game => (
-          <div style={style} key={game.id}>
-            <p>{game.name}</p>
-            <p>{game.rating}</p>
-          </div>
-        ))}
+        <List>
+          {games.map(game => (
+            <ListItem key={game.id}>
+              <ListItemText>{game.name}</ListItemText>
+              <ListItemText>{game.rating}</ListItemText>
+            </ListItem>
+          ))}
+        </List>
+
       </InfiniteScroll>}
     </>
   )

@@ -8,6 +8,8 @@ import {
 import { BrowserRouter as Router } from 'react-router-dom';
 import { cache } from './graphql/cache'
 import { setContext } from 'apollo-link-context';
+import { ThemeProvider } from '@material-ui/core';
+import theme from './theme';
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('user-token')
@@ -30,7 +32,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <ApolloProvider client={client}>
-        <App />
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
       </ApolloProvider>
     </Router>
   </React.StrictMode>,

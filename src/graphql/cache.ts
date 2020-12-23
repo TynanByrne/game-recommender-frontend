@@ -3,6 +3,7 @@ import { GameDetails } from '../types'
 export const extraGamesVar: ReactiveVar<GameDetails[]> = makeVar<GameDetails[]>([])
 export const currentNextVar: ReactiveVar<string> = makeVar<string>('')
 export const tokenVar: ReactiveVar<string> = makeVar<string>('dummy token')
+export const loggedInVar: ReactiveVar<boolean> = makeVar<boolean>(false)
 
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
@@ -20,9 +21,11 @@ export const cache: InMemoryCache = new InMemoryCache({
         },
         loggedIn: {
           read() {
-            return localStorage.getItem('user-token')?.includes(
+            const loggedIn = localStorage.getItem('user-token')?.includes(
               tokenVar()
             )
+            loggedInVar(loggedIn)
+            return loggedIn
           }
         }
       }
