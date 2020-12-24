@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { Formik } from 'formik'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router'
 import * as yup from 'yup'
 import { loggedInVar, tokenVar } from '../graphql/cache'
@@ -31,9 +31,17 @@ const initialValues: MyFormValues = {
 }
 
 const Login: React.FC = () => {
-  const [login] = useMutation(LOGIN)
+  const [login, result] = useMutation(LOGIN)
   const history = useHistory()
 
+  useEffect(() => {
+    if (result.data) {
+      const token = result.data.login.value
+      tokenVar(token)
+      localStorage.setItem('user-token', token)
+    }
+  }, [result.data])
+  
   if (loggedInVar()) {
     history.push('/')
   }
@@ -54,14 +62,15 @@ const Login: React.FC = () => {
             })
             console.log(result)
             const token = result.data.login.value
-            localStorage.setItem('user-token', token)
+            window.localStorage.setItem('user-token', token)
             tokenVar(token)
+            loggedInVar(true)
             history.push('/')
           } catch (error) {
-            console.error(error.message)
+            console.error("error.message,", error)
           }
           setSubmitting(false)
-          console.log('Logged in!')
+          console.log('Log in attempt')
         }}>
         {({ submitForm, isSubmitting }) => (
           <LoginForm submitForm={submitForm} isSubmitting={isSubmitting} />

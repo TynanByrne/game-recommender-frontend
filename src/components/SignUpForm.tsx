@@ -37,6 +37,7 @@ const SignUpForm: React.FC<FormProps> = ({ isSubmitting, submitForm }) => {
         variant='contained'
         onClick={submitForm}
         disabled={isSubmitting}
+        type='submit'
       >
         Sign up
       </Button>

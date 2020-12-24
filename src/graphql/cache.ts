@@ -21,11 +21,6 @@ export const cache: InMemoryCache = new InMemoryCache({
         },
         loggedIn: {
           read() {
-            const loggedIn = localStorage.getItem('user-token')?.includes(
-              tokenVar()
-            )
-            loggedInVar(loggedIn)
-            console.log('logged var is ', loggedInVar())
             return loggedInVar()
           }
         }

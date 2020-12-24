@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client'
 import { Typography } from '@material-ui/core'
 import { Alert, AlertTitle } from '@material-ui/lab'
 import React from 'react'
+import { loggedInVar } from '../graphql/cache'
 import { ME } from '../graphql/queries'
 import { User } from '../types'
 
@@ -11,9 +12,10 @@ interface MeData {
 }
 
 const Home: React.FC = () => {
-  const { data, loading } = useQuery<MeData, boolean>(ME)
+  const { data, loading } = useQuery<MeData, boolean>(ME, {
+    pollInterval: 1000
+  })
   console.log("ME DATA IS", data)
-  
 
   if (loading) {
     return (
@@ -26,10 +28,10 @@ const Home: React.FC = () => {
   return (
     <>
       <Typography variant='h2'>Hello, world!</Typography>
-      {data?.loggedIn && (
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        <Alert onClose={() => { }}>
-          <AlertTitle>Logged in</AlertTitle>
+      {loggedInVar() && data?.me && (
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          <Alert onClose={() => { }}>
+            <AlertTitle>Logged in</AlertTitle>
           Welcome back, {data.me.username}!
         </Alert>
       )}

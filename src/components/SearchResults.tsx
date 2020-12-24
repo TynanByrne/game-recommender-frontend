@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { GET_CURRENT_NEXT, GET_EXTRA_GAMES, SEARCH_GAMES } from '../graphql/queries'
 import { GameDetails, SearchedGamesData, SearchedGamesVars, SearchedGames } from '../types'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useQuery } from '@apollo/client'
 import axios from 'axios'
 import { extraGamesVar, currentNextVar } from '../graphql/cache'
-import { Typography, Button, Card, CardMedia, CardActionArea, CardContent, makeStyles } from '@material-ui/core'
+import { Typography, Card, CardMedia, CardActionArea, CardContent, makeStyles, CircularProgress } from '@material-ui/core'
 
 interface ExtraGamesData {
   extraGames: GameDetails[]
@@ -27,7 +27,6 @@ const useStyles = makeStyles({
 
 const SearchResults: React.FC = () => {
   const { search } = useParams<{ search: string }>()
-  const history = useHistory()
   const classes = useStyles()
   const [hasMore, setHasMore] = useState(true)
   const { loading, data } = useQuery<SearchedGamesData, SearchedGamesVars>(SEARCH_GAMES,
@@ -66,12 +65,11 @@ const SearchResults: React.FC = () => {
     <>
       <Typography variant='h4'>Here are all the games that match that search</Typography>
       <br />
-      <Button variant='contained' onClick={(): void => history.push('/')}>Go home</Button>
       {games && <InfiniteScroll
         dataLength={games.length}
         next={fetchMore}
         hasMore={hasMore}
-        loader={<h3>Loading...</h3>}
+        loader={<CircularProgress />}
         endMessage={
           <div>
             <b>That is all, folks!</b>

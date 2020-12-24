@@ -1,8 +1,8 @@
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useReactiveVar } from '@apollo/client'
 import { AppBar, Button, createStyles, IconButton, makeStyles, Theme, Toolbar, Typography } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import React from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useHistory } from 'react-router-dom'
 import { loggedInVar, tokenVar } from '../graphql/cache'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,13 +19,18 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+
 const NavBar: React.FC = () => {
+  const loggedIn = useReactiveVar(loggedInVar)
+  const history = useHistory()
   const client = useApolloClient()
   const classes = useStyles()
   const logOut = (): void => {
     tokenVar('')
+    loggedInVar(false)
     localStorage.clear()
     client.resetStore()
+    history.push('/')
   }
   return (
     <AppBar position='static'>
@@ -35,10 +40,10 @@ const NavBar: React.FC = () => {
         </IconButton>
         <Typography variant='h4' className={classes.title}>Game Recommender</Typography>
         <Button color='inherit' component={RouterLink} to='/'>Home</Button>
-        {loggedInVar() && <Button variant='contained' onClick={logOut}>
+        {loggedIn && <Button variant='contained' onClick={logOut}>
           Log out
         </Button>}
-        {!loggedInVar() && (
+        {!loggedIn && (
           <>
             <Button color='inherit' component={RouterLink} to='/login'>
               Log in

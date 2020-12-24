@@ -11,7 +11,7 @@ interface FormProps {
 
 const LoginForm: React.FC<FormProps> = ({ isSubmitting, submitForm }) => {
   return (
-    <Form onSubmit={submitForm}>
+    <Form>
       <Field
         component={TextField}
         type='text'
@@ -31,6 +31,7 @@ const LoginForm: React.FC<FormProps> = ({ isSubmitting, submitForm }) => {
         variant='contained'
         onClick={submitForm}
         disabled={isSubmitting}
+        type='submit'
       >
         Log in
       </Button>

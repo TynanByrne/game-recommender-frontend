@@ -3,7 +3,7 @@ import { Formik } from 'formik'
 import React from 'react'
 import { useHistory } from 'react-router'
 import * as yup from 'yup'
-import { tokenVar } from '../graphql/cache'
+import { loggedInVar, tokenVar } from '../graphql/cache'
 import { LOGIN, SIGN_UP } from '../graphql/mutations'
 import SignUpForm from './SignUpForm'
 
@@ -57,6 +57,7 @@ const SignUp: React.FC = () => {
         const token = result.data.login.value
         localStorage.setItem('user-token', token)
         tokenVar(token)
+        loggedInVar(true)
         history.push('/')
       }
     } catch (error) {
