@@ -17,6 +17,7 @@ const Home: React.FC = () => {
   })
   console.log("ME DATA IS", data)
 
+
   if (loading) {
     return (
       <div>
@@ -29,9 +30,9 @@ const Home: React.FC = () => {
     <>
       <Typography variant='h2'>Hello, world!</Typography>
       {loggedInVar() && data?.me && (
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          <Alert onClose={() => { }}>
-            <AlertTitle>Logged in</AlertTitle>
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        <Alert onClose={() => { }}>
+          <AlertTitle>Logged in</AlertTitle>
           Welcome back, {data.me.username}!
         </Alert>
       )}
