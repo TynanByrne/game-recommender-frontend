@@ -11,7 +11,7 @@ interface FormProps {
 
 const LoginForm: React.FC<FormProps> = ({ isSubmitting, submitForm }) => {
   return (
-    <Form>
+    <Form onSubmit={submitForm}>
       <Field
         component={TextField}
         type='text'

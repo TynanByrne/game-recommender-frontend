@@ -6,7 +6,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { useQuery } from '@apollo/client'
 import axios from 'axios'
 import { extraGamesVar, currentNextVar } from '../graphql/cache'
-import { Typography, Button, List, ListItemText, ListItem } from '@material-ui/core'
+import { Typography, Button, Card, CardMedia, CardActionArea, CardContent, makeStyles } from '@material-ui/core'
 
 interface ExtraGamesData {
   extraGames: GameDetails[]
@@ -16,9 +16,19 @@ interface CurrentNextData {
   currentNext: string
 }
 
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 345,
+  },
+  media: {
+    height: 140,
+  },
+});
+
 const SearchResults: React.FC = () => {
   const { search } = useParams<{ search: string }>()
   const history = useHistory()
+  const classes = useStyles()
   const [hasMore, setHasMore] = useState(true)
   const { loading, data } = useQuery<SearchedGamesData, SearchedGamesVars>(SEARCH_GAMES,
     { variables: { searchTerm: search } }
@@ -68,14 +78,26 @@ const SearchResults: React.FC = () => {
           </div>
         }
       >
-        <List>
+
           {games.map(game => (
-            <ListItem key={game.id}>
-              <ListItemText>{game.name}</ListItemText>
-              <ListItemText>{game.rating}</ListItemText>
-            </ListItem>
+            <Card key={game.id} className={classes.root}>
+              <CardActionArea>
+                <CardMedia
+                  className={classes.media}
+                  image={game.background_image}
+                />
+                <CardContent>
+                  <Typography variant='h5' component='h2'>
+                    {game.name}
+                  </Typography>
+                  <Typography variant='h6'>
+                    {game.rating}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
           ))}
-        </List>
+
 
       </InfiniteScroll>}
     </>

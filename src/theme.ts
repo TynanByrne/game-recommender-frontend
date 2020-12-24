@@ -1,17 +1,16 @@
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles'
 
-/* const xboxGreen = '#0E7A0D' */
+
 const geforceGreen = '#76B900'
 let theme = createMuiTheme({
   palette: {
     primary: {
-      main: geforceGreen[600],
+      main: geforceGreen,
     },
     secondary: {
-      main: '#EC8116'[700]
+      main: '#ff9100',
     },
-
-    type: 'dark'
+    type: 'dark',
   }
 
 })

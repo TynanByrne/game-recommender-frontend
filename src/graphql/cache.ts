@@ -25,7 +25,8 @@ export const cache: InMemoryCache = new InMemoryCache({
               tokenVar()
             )
             loggedInVar(loggedIn)
-            return loggedIn
+            console.log('logged var is ', loggedInVar())
+            return loggedInVar()
           }
         }
       }

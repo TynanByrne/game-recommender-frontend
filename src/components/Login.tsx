@@ -3,7 +3,7 @@ import { Formik } from 'formik'
 import React from 'react'
 import { useHistory } from 'react-router'
 import * as yup from 'yup'
-import { tokenVar } from '../graphql/cache'
+import { loggedInVar, tokenVar } from '../graphql/cache'
 import { LOGIN } from '../graphql/mutations'
 import LoginForm from './LoginForm'
 
@@ -33,6 +33,10 @@ const initialValues: MyFormValues = {
 const Login: React.FC = () => {
   const [login] = useMutation(LOGIN)
   const history = useHistory()
+
+  if (loggedInVar()) {
+    history.push('/')
+  }
   return (
     <div>
       <h1>Time to log in</h1>
@@ -40,6 +44,7 @@ const Login: React.FC = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
+          setSubmitting(true)
           const { username, password } = values
           try {
             const result = await login({
