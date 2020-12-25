@@ -4,6 +4,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import React from 'react'
 import { Link as RouterLink, useHistory } from 'react-router-dom'
 import { loggedInVar, tokenVar } from '../graphql/cache'
+import Searchbar from './Searchbar'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,6 +40,7 @@ const NavBar: React.FC = () => {
           <MenuIcon />
         </IconButton>
         <Typography variant='h4' className={classes.title}>Game Recommender</Typography>
+        <Searchbar />
         <Button color='inherit' component={RouterLink} to='/'>Home</Button>
         {loggedIn && <Button variant='contained' onClick={logOut}>
           Log out

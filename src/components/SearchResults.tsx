@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import { GET_CURRENT_NEXT, GET_EXTRA_GAMES, SEARCH_GAMES } from '../graphql/queries'
 import { GameDetails, SearchedGamesData, SearchedGamesVars, SearchedGames } from '../types'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -28,6 +28,7 @@ const useStyles = makeStyles({
 const SearchResults: React.FC = () => {
   const { search } = useParams<{ search: string }>()
   const classes = useStyles()
+  const history = useHistory()
   const [hasMore, setHasMore] = useState(true)
   const { loading, data } = useQuery<SearchedGamesData, SearchedGamesVars>(SEARCH_GAMES,
     { variables: { searchTerm: search } }
@@ -79,7 +80,7 @@ const SearchResults: React.FC = () => {
 
           {games.map(game => (
             <Card key={game.id} className={classes.root}>
-              <CardActionArea>
+              <CardActionArea onClick={() => history.push(`/games/singlegame/${game.id}`)}>
                 <CardMedia
                   className={classes.media}
                   image={game.background_image}

@@ -1,11 +1,10 @@
-import { useApolloClient, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { Formik } from 'formik'
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router'
 import * as yup from 'yup'
 import { loggedInVar, tokenVar } from '../graphql/cache'
 import { LOGIN } from '../graphql/mutations'
-import { ME } from '../graphql/queries'
 import LoginForm from './LoginForm'
 
 const validationSchema = yup.object().shape({
@@ -34,7 +33,6 @@ const initialValues: MyFormValues = {
 const Login: React.FC = () => {
   const [login, result] = useMutation(LOGIN)
   const history = useHistory()
-  const client = useApolloClient()
 
   useEffect(() => {
     if (result.data) {
@@ -67,7 +65,6 @@ const Login: React.FC = () => {
             window.localStorage.setItem('user-token', token)
             tokenVar(token)
             loggedInVar(true)
-            client.query({ query: ME })
             history.push('/')
           } catch (error) {
             console.error("error.message,", error)

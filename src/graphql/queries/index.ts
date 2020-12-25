@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { GAME_BASICS } from '../fragments'
+import { GAME_BASICS, SINGLE_GAME } from '../fragments'
 
 export const SEARCH_GAMES = gql`
   query searchGames($searchTerm: String!) {
@@ -37,4 +37,13 @@ export const ME = gql`
     }
     loggedIn @client
   }
+`
+
+export const GET_SINGLE_GAME = gql`
+  query singleGame($id: Int!) {
+    singleGame(id: $id) {
+      ...SingleGameDetails
+    }   
+  }
+  ${SINGLE_GAME}
 `
