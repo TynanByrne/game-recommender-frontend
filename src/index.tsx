@@ -10,6 +10,7 @@ import { cache } from './graphql/cache'
 import { setContext } from 'apollo-link-context';
 import { ThemeProvider } from '@material-ui/core';
 import theme from './theme';
+import typeDefs from './graphql/typedefs';
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('user-token')
@@ -25,7 +26,8 @@ const httpLink = createHttpLink({ uri: 'http://localhost:4000' })
 
 const client = new ApolloClient({
   cache,
-  link: authLink.concat(httpLink as any) as any // TypeScript and Apollo not playing nice here
+  link: authLink.concat(httpLink as any) as any, // TypeScript and Apollo not playing nice here
+  typeDefs: typeDefs,
 })
 
 ReactDOM.render(

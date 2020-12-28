@@ -22,6 +22,7 @@ export interface GameDetails {
   name: string
   rating: number
   background_image: string
+  clip: Clip
 }
 
 export interface NextSetVars {
@@ -127,3 +128,12 @@ interface Tag {
   games_count: number
   image_background: string
 }
+export interface GameCollections {
+  wishlist: string[]
+  unfinished: string[]
+  notStarted: string[]
+  playing: string[]
+  completed: string[]
+}
+
+export type GameCategory = 'unfinished' | 'wishlist ' | 'not started' | 'playing' | 'completed'

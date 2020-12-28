@@ -20,6 +20,9 @@ export const GET_EXTRA_GAMES = gql`
       name
       slug
       rating
+      clip {
+        clip
+      }
     }
   }
 `

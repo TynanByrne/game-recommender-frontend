@@ -6,7 +6,7 @@ import { loggedInVar } from '../graphql/cache'
 import { ME } from '../graphql/queries'
 import { User } from '../types'
 
-interface MeData {
+export interface MeData {
   me: User
   loggedIn: boolean
 }

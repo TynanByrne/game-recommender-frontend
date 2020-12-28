@@ -80,3 +80,26 @@ export const SINGLE_GAME = gql`
     }
   }
 `
+
+export const LIBRARY_GAMES = gql`
+  fragment LibraryGames on Library {
+    games {
+        wishlist {
+          _id
+        }
+        completed {
+          _id
+        }
+        unfinished {
+          _id
+        }
+        notStarted {
+          _id
+        }
+        playing {
+          _id
+        }
+      }
+      totalGames
+  }
+`
