@@ -28,6 +28,8 @@ const extractGame = (fullGame: SingleGame): GameForDatabase => {
     genres: fullGame.genres,
     tags: fullGame.tags,
   }
+  console.log(reducedGame)
+  // TAKE OUT THE __TYPENAMES HERE SOMEHOW!!
   return reducedGame
 }
 
@@ -59,11 +61,12 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username }) => {
           try {
             const result = await addGame({
               variables: {
-                username: username,
+                username,
                 gameCategory: 'playing',
                 game: extractGame(game),
               }
             })
+            console.log(extractGame(game))
             console.log(result)
           } catch (error) {
             console.error(error)
