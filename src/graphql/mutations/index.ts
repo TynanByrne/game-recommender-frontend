@@ -23,8 +23,8 @@ export const ADD_GAME = gql`
   mutation addGame(
     $username: String!,
     $gameCategory: String!,
-    $game: GameInput!) {
-    addGame(username: $username, gameCategory: $gameCategory, game: $game) {
+    $gameId: Int!) {
+    addGame(username: $username, gameCategory: $gameCategory, gameId: $gameId) {
       ...LibraryGames
     }
   }

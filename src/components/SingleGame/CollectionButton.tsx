@@ -8,29 +8,10 @@ interface ButtonProps {
   game: SingleGame
   username: string
 }
-type GameForDatabase = Pick<
-  SingleGame, 'id' | 'name' | 'metacritic' | 'released' | 'background_image' | 'parent_platforms' | 'genres' | 'tags'
->
 interface AddGameVars {
   username: string
   gameCategory: GameCategory
-  game: GameForDatabase
-}
-
-const extractGame = (fullGame: SingleGame): GameForDatabase => {
-  const reducedGame = {
-    id: fullGame.id,
-    name: fullGame.name,
-    metacritic: fullGame.metacritic,
-    released: fullGame.released,
-    background_image: fullGame.background_image,
-    parent_platforms: fullGame.parent_platforms,
-    genres: fullGame.genres,
-    tags: fullGame.tags,
-  }
-  console.log(reducedGame)
-  // TAKE OUT THE __TYPENAMES HERE SOMEHOW!!
-  return reducedGame
+  gameId: number
 }
 
 const CollectionButton: React.FC<ButtonProps> = ({ game, username }) => {
@@ -63,10 +44,9 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username }) => {
               variables: {
                 username,
                 gameCategory: 'playing',
-                game: extractGame(game),
+                gameId: Number(game.id),
               }
             })
-            console.log(extractGame(game))
             console.log(result)
           } catch (error) {
             console.error(error)
