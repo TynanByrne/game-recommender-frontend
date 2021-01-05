@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { GAME_BASICS, SINGLE_GAME } from '../fragments'
+import { DATABASE_GAME, GAME_BASICS, LIBRARY_GAMES, SINGLE_GAME } from '../fragments'
 
 export const SEARCH_GAMES = gql`
   query searchGames($searchTerm: String!) {
@@ -37,6 +37,8 @@ export const ME = gql`
   query me {
     me {
       username
+      id
+      library
     }
     loggedIn @client
   }
@@ -49,4 +51,29 @@ export const GET_SINGLE_GAME = gql`
     }   
   }
   ${SINGLE_GAME}
+`
+
+export const GET_LIBRARY = gql`
+  query myLibrary($libraryId: String!) {
+    myLibrary(libraryId: $libraryId) {
+      ...LibraryGames
+    }
+  }
+  ${LIBRARY_GAMES}
+`
+
+export const GET_DBGAME = gql`
+  query fetchGameData($gameId: String!) {
+    fetchGameData(gameId: $gameId) {
+      numberId
+      ...DatabaseGame
+    }
+  }
+  ${DATABASE_GAME}
+`
+
+export const GET_GAME_OBJECTID = gql`
+  query fetchGameObjectId($gameRawgId: Int!) {
+    fetchGameObjectId(gameRawgId: $gameRawgId)
+  }
 `

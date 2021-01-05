@@ -81,6 +81,29 @@ export const SINGLE_GAME = gql`
   }
 `
 
+export const DATABASE_GAME = gql`
+  fragment DatabaseGame on SingleGame {
+    name
+    metacritic
+    released
+    background_image
+    genres {
+      id
+      name
+    }
+    parent_platforms {
+      platform {
+        id
+        name
+      }
+    }
+    tags {
+      id
+      name
+    }
+  }
+`
+
 export const LIBRARY_GAMES = gql`
   fragment LibraryGames on Library {
     games {

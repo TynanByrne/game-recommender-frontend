@@ -11,6 +11,7 @@ export interface MeData {
   loggedIn: boolean
 }
 
+
 const SingleGame: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const numberId = Number(id)
@@ -21,20 +22,19 @@ const SingleGame: React.FC = () => {
   const { data: meData, loading: meLoading } = useQuery<MeData, boolean>(ME, {
     pollInterval: 1000,
   })
-
   if (!loading && !data) {
     return <Typography variant='h2'>Something went wrong!</Typography>
   }
 
   const game = data?.singleGame
-  console.log(game)
-  console.log(meData)
+  console.log("game is", game)
+  console.log("I am", meData)
   if (meLoading) {
     return (
       <CircularProgress />
     )
   }
-  if (game && meData?.me) {
+  if (game) {
     return (
       <>
         <Typography variant='h1'>
@@ -50,7 +50,7 @@ const SingleGame: React.FC = () => {
         <div>
           {game.description}
         </div>
-        <CollectionButton game={game} username={meData?.me.username} />
+        {meData?.me && <CollectionButton game={game} username={meData?.me?.username} libraryId={meData?.me?.library} />}
       </>
     )
   }

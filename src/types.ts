@@ -32,6 +32,7 @@ export interface NextSetVars {
 export interface User {
   username: string
   id: string
+  library: string
 }
 export interface SingleGameVars {
   id: number
@@ -135,5 +136,10 @@ export interface GameCollections {
   playing: string[]
   completed: string[]
 }
+
+export interface MyLibraryData {
+  myLibrary: GameCollections
+}
+
 
 export type GameCategory = 'unfinished' | 'wishlist ' | 'not started' | 'playing' | 'completed'
