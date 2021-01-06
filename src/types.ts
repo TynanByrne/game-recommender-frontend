@@ -129,16 +129,23 @@ interface Tag {
   games_count: number
   image_background: string
 }
+export interface GameObjectID {
+  _id: string
+}
 export interface GameCollections {
-  wishlist: string[]
-  unfinished: string[]
-  notStarted: string[]
-  playing: string[]
-  completed: string[]
+  wishlist: GameObjectID[]
+  unfinished: GameObjectID[]
+  notStarted: GameObjectID[]
+  playing: GameObjectID[]
+  completed: GameObjectID[]
 }
 
 export interface MyLibraryData {
-  myLibrary: GameCollections
+  myLibrary: Library
+}
+interface Library {
+  games: GameCollections
+  totalGames: number
 }
 
 

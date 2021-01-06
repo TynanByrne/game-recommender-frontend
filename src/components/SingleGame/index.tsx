@@ -29,9 +29,9 @@ const SingleGame: React.FC = () => {
   const game = data?.singleGame
   console.log("game is", game)
   console.log("I am", meData)
-  if (meLoading) {
+  if (meLoading || loading) {
     return (
-      <CircularProgress />
+      <CircularProgress size='10rem' />
     )
   }
   if (game) {
