@@ -35,9 +35,22 @@ const inCollection = (id: string, gameList: GameObjectID[]): boolean => {
 
 const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [addGame, { loading, data }] = useMutation<AddGameVars>(ADD_GAME)
   const { data: libraryData, loading: libraryLoading } = useQuery<MyLibraryData, LibraryVars>(GET_LIBRARY, {
     variables: { libraryId },
+    fetchPolicy: 'cache-and-network',
+    pollInterval: 3000,
+  })
+  const [addGame, { loading, data }] = useMutation<AddGameVars>(ADD_GAME, {
+    refetchQueries: () => [
+      {
+        query: GET_LIBRARY,
+        variables: { libraryId }
+      },
+      {
+        query: GET_GAME_OBJECTID,
+        variables: { gameRawgId: Number(game.id) }
+      }
+    ]
   })
   const { data: objectIdData } = useQuery<ObjectIdData, ObjectIdVars>(GET_GAME_OBJECTID, {
     variables: { gameRawgId: Number(game.id) }
@@ -50,23 +63,25 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
   const [inNotStarted, setInNotStarted] = useState<boolean>(false)
   const [alreadyAdded, setAlreadyAdded] = useState<boolean>(true)
 
-  useEffect(() => {
-    if (libraryData?.myLibrary?.games && objectIdData?.fetchGameObjectId) {
+  const library = libraryData?.myLibrary?.games
+  const objectId = objectIdData?.fetchGameObjectId
+
+  useEffect((): void => {
+    if (library) {
       console.log("useEffect FIRED")
-      const library = libraryData.myLibrary.games
-      const objectId = objectIdData.fetchGameObjectId
-      console.log(library)
       console.log(objectIdData)
-      if (inCollection(objectId, library.playing)) {
-        setInPlaying(true)
-      } else if (inCollection(objectId, library.wishlist)) {
-        setInWishlist(true)
-      } else if (inCollection(objectId, library.completed)) {
-        setInCompleted(true)
-      } else if (inCollection(objectId, library.unfinished)) {
-        setInUnfinished(true)
-      } else if (inCollection(objectId, library.notStarted)) {
-        setInNotStarted(true)
+      if (objectId) {
+        if (inCollection(objectId, library.playing)) {
+          setInPlaying(true)
+        } else if (inCollection(objectId, library.wishlist)) {
+          setInWishlist(true)
+        } else if (inCollection(objectId, library.completed)) {
+          setInCompleted(true)
+        } else if (inCollection(objectId, library.unfinished)) {
+          setInUnfinished(true)
+        } else if (inCollection(objectId, library.notStarted)) {
+          setInNotStarted(true)
+        }
       } else {
         console.log("Nothing set.")
         setAlreadyAdded(false)
@@ -74,9 +89,9 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
     }
   }, [libraryData, objectIdData])
 
-
-
-
+  console.log("library is", library)
+  console.log("objectId is", objectId)
+  console.log("ALREADY ADDED IS", alreadyAdded)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -93,13 +108,7 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
           username,
           gameCategory,
           gameId: Number(game.id),
-        },
-        refetchQueries: [
-          {
-            query: GET_LIBRARY,
-            variables: { libraryId },
-          }
-        ]
+        }
       })
       console.log(result)
     } catch (error) {
@@ -113,7 +122,7 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
   return (
     <>
       <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-        Add to collection
+        {alreadyAdded ? "Edit collection" : "Add to collection"}
       </Button>
       <Menu
         id="simple-menu"
