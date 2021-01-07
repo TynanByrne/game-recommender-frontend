@@ -82,6 +82,7 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
         } else if (inCollection(objectId, library.notStarted)) {
           setInNotStarted(true)
         }
+        setAlreadyAdded(true)
       } else {
         console.log("Nothing set.")
         setAlreadyAdded(false)
