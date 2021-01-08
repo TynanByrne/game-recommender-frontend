@@ -41,10 +41,9 @@ const inCollection = (id: string, gameList: GameObjectID[]): boolean => {
 
 const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { data: libraryData, loading: libraryLoading } = useQuery<MyLibraryData, LibraryVars>(GET_LIBRARY, {
+  const { data: libraryData } = useQuery<MyLibraryData, LibraryVars>(GET_LIBRARY, {
     variables: { libraryId },
     fetchPolicy: 'cache-and-network',
-    pollInterval: 3000,
   })
   const refetcher = () => [
     {
@@ -80,6 +79,14 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
     if (inUnfinished) return 'unfinished'
     if (inNotStarted) return 'not started'
     return undefined
+  }
+
+  const resetLists = (): void => {
+    setInPlaying(false)
+    setInWishlist(false)
+    setInCompleted(false)
+    setInUnfinished(false)
+    setInNotStarted(false)
   }
 
   const library = libraryData?.myLibrary?.games
@@ -140,6 +147,7 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
             gameId: Number(game.id)
           }
         })
+        resetLists()
       }
     } catch (error) {
       console.error(error)
@@ -188,7 +196,7 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
         </MenuItem>
         {(loading || editResult.loading) && <CircularProgress />}
         {(data && !editResult.data) && <Typography>{game.name} added to collection.</Typography>}
-        {(editResult.data && !data) && <Typography>{game.name} moved lists.</Typography>}
+        {editResult.data && <Typography>{game.name} moved lists.</Typography>}
       </Menu>
     </>
   )
