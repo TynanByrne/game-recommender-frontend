@@ -49,3 +49,12 @@ export const EDIT_GAME = gql`
   }
   ${LIBRARY_GAMES}
 `
+
+export const REMOVE_GAME = gql`
+  mutation removeGame($username: String!, $gameId: Int!) {
+    removeGame(username: $username, gameId: $gameId) {
+      ...LibraryGames
+    }
+  }
+  ${LIBRARY_GAMES}
+`

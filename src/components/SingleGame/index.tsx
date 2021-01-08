@@ -4,7 +4,7 @@ import React from 'react'
 import { useHistory, useParams } from 'react-router'
 import { GET_SINGLE_GAME, ME } from '../../graphql/queries'
 import { SingleGameData, SingleGameVars, User } from '../../types'
-import CollectionButton from './CollectionButton'
+import CollectionButtons from './CollectionButtons'
 
 export interface MeData {
   me: User
@@ -50,7 +50,7 @@ const SingleGame: React.FC = () => {
         <div>
           {game.description}
         </div>
-        {meData?.me && <CollectionButton game={game} username={meData?.me?.username} libraryId={meData?.me?.library} />}
+        {meData?.me && <CollectionButtons game={game} username={meData.me?.username} libraryId={meData?.me?.library} />}
       </>
     )
   }
