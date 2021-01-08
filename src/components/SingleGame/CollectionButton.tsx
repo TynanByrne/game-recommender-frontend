@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Button, CircularProgress, Menu, MenuItem, Typography } from '@material-ui/core'
 import React, { useState, useEffect } from 'react'
-import { ADD_GAME } from '../../graphql/mutations';
+import { ADD_GAME, EDIT_GAME } from '../../graphql/mutations';
 import { GET_GAME_OBJECTID, GET_LIBRARY } from '../../graphql/queries';
 import { GameCategory, SingleGame, MyLibraryData, GameObjectID } from '../../types'
 
@@ -13,6 +13,12 @@ interface ButtonProps {
 interface AddGameVars {
   username: string
   gameCategory: GameCategory
+  gameId: number
+}
+interface EditGameVars {
+  username: string
+  newCategory: string
+  oldCategory: string
   gameId: number
 }
 interface LibraryVars {
@@ -40,17 +46,21 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
     fetchPolicy: 'cache-and-network',
     pollInterval: 3000,
   })
+  const refetcher = () => [
+    {
+      query: GET_LIBRARY,
+      variables: { libraryId }
+    },
+    {
+      query: GET_GAME_OBJECTID,
+      variables: { gameRawgId: Number(game.id) }
+    }
+  ]
   const [addGame, { loading, data }] = useMutation<AddGameVars>(ADD_GAME, {
-    refetchQueries: () => [
-      {
-        query: GET_LIBRARY,
-        variables: { libraryId }
-      },
-      {
-        query: GET_GAME_OBJECTID,
-        variables: { gameRawgId: Number(game.id) }
-      }
-    ]
+    refetchQueries: refetcher()
+  })
+  const [editGame, editResult] = useMutation<EditGameVars>(EDIT_GAME, {
+    refetchQueries: refetcher()
   })
   const { data: objectIdData } = useQuery<ObjectIdData, ObjectIdVars>(GET_GAME_OBJECTID, {
     variables: { gameRawgId: Number(game.id) }
@@ -62,6 +72,15 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
   const [inUnfinished, setInUnfinished] = useState<boolean>(false)
   const [inNotStarted, setInNotStarted] = useState<boolean>(false)
   const [alreadyAdded, setAlreadyAdded] = useState<boolean>(true)
+
+  const currentCategory = (): GameCategory | undefined => {
+    if (inPlaying) return 'playing'
+    if (inWishlist) return 'wishlist'
+    if (inCompleted) return 'completed'
+    if (inUnfinished) return 'unfinished'
+    if (inNotStarted) return 'not started'
+    return undefined
+  }
 
   const library = libraryData?.myLibrary?.games
   const objectId = objectIdData?.fetchGameObjectId
@@ -102,16 +121,26 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
     setAnchorEl(null)
   };
 
-  const handleAddGame = async (gameCategory: string): Promise<void> => {
+  const handleAddGame = async (gameCategory: GameCategory, oldCategory: GameCategory | undefined): Promise<void> => {
     try {
-      const result = await addGame({
-        variables: {
-          username,
-          gameCategory,
-          gameId: Number(game.id),
-        }
-      })
-      console.log(result)
+      if (!alreadyAdded) {
+        await addGame({
+          variables: {
+            username,
+            gameCategory,
+            gameId: Number(game.id),
+          }
+        })
+      } else {
+        await editGame({
+          variables: {
+            username,
+            newCategory: gameCategory,
+            oldCategory,
+            gameId: Number(game.id)
+          }
+        })
+      }
     } catch (error) {
       console.error(error)
     }
@@ -133,32 +162,33 @@ const CollectionButton: React.FC<ButtonProps> = ({ game, username, libraryId }) 
         onClose={handleClose}
       >
         <MenuItem
-          onClick={() => handleAddGame('playing')}
+          onClick={() => handleAddGame('playing', currentCategory())}
           disabled={inPlaying}>
           Playing
         </MenuItem>
         <MenuItem
-          onClick={() => handleAddGame('completed')}
+          onClick={() => handleAddGame('completed', currentCategory())}
           disabled={inCompleted}>
           Completed
         </MenuItem>
         <MenuItem
-          onClick={() => handleAddGame('not started')}
+          onClick={() => handleAddGame('not started', currentCategory())}
           disabled={inNotStarted}>
           Not started
         </MenuItem>
         <MenuItem
-          onClick={() => handleAddGame('unfinished')}
+          onClick={() => handleAddGame('unfinished', currentCategory())}
           disabled={inUnfinished}>
           Unfinished
         </MenuItem>
         <MenuItem
-          onClick={() => handleAddGame('wishlist')}
+          onClick={() => handleAddGame('wishlist', currentCategory())}
           disabled={inWishlist}>
           Wishlist
         </MenuItem>
-        {loading && <CircularProgress />}
-        {data && <Typography>{game.name} added to collection.</Typography>}
+        {(loading || editResult.loading) && <CircularProgress />}
+        {(data && !editResult.data) && <Typography>{game.name} added to collection.</Typography>}
+        {(editResult.data && !data) && <Typography>{game.name} moved lists.</Typography>}
       </Menu>
     </>
   )

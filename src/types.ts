@@ -149,4 +149,4 @@ interface Library {
 }
 
 
-export type GameCategory = 'unfinished' | 'wishlist ' | 'not started' | 'playing' | 'completed'
+export type GameCategory = 'unfinished' | 'wishlist' | 'not started' | 'playing' | 'completed'

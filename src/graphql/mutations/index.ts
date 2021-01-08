@@ -30,3 +30,22 @@ export const ADD_GAME = gql`
   }
   ${LIBRARY_GAMES}
 `
+
+export const EDIT_GAME = gql`
+  mutation editGame(
+    $username: String!,
+    $newCategory: String!,
+    $oldCategory: String!,
+    $gameId: Int!
+  ) {
+    editGame(
+      username: $username,
+      newCategory: $newCategory,
+      oldCategory: $oldCategory,
+      gameId: $gameId,
+    ) {
+      ...LibraryGames
+    }
+  }
+  ${LIBRARY_GAMES}
+`
