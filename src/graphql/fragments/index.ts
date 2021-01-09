@@ -82,7 +82,7 @@ export const SINGLE_GAME = gql`
 `
 
 export const DATABASE_GAME = gql`
-  fragment DatabaseGame on SingleGame {
+  fragment DatabaseGame on DatabaseGame {
     name
     metacritic
     released

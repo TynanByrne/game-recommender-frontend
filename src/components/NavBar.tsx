@@ -42,15 +42,21 @@ const NavBar: React.FC = () => {
         <Typography variant='h4' className={classes.title}>Game Recommender</Typography>
         <Searchbar />
         <Button color='inherit' component={RouterLink} to='/'>Home</Button>
-        {loggedIn && <Button variant='contained' onClick={logOut}>
-          Log out
-        </Button>}
+        {loggedIn &&
+          <>
+            <Button variant='contained' component={RouterLink} to='/gamelibrary'>
+              My library
+            </Button>
+            <Button variant='contained' onClick={logOut}>
+              Log out
+            </Button>
+          </>}
         {!loggedIn && (
           <>
-            <Button color='inherit' component={RouterLink} to='/login'>
+            <Button variant='contained' color='inherit' component={RouterLink} to='/login'>
               Log in
             </Button>
-            <Button color='inherit' component={RouterLink} to='/signup'>
+            <Button variant='contained' color='inherit' component={RouterLink} to='/signup'>
               Sign up
             </Button>
           </>)}

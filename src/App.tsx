@@ -1,6 +1,7 @@
 import { Container, CssBaseline } from '@material-ui/core';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom'
+import GameLibrary from './components/GameLibrary';
 import Home from './components/Home';
 import Login from './components/Login';
 import NavBar from './components/NavBar';
@@ -19,6 +20,9 @@ const App: React.FC = () => {
           </Route>
           <Route path='/games/:search'>
             <SearchResults />
+          </Route>
+          <Route path='/gamelibrary'>
+            <GameLibrary />
           </Route>
           <Route path='/signup'>
             <SignUp />

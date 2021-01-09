@@ -1,3 +1,5 @@
+import { StringSchema } from "yup"
+
 export interface SearchedGames {
   count: number
   next: string
@@ -53,12 +55,12 @@ export interface SingleGame {
   website: string
   reddit_url: string
   reddit_name: string
-  alternative_names: [string]
-  parent_platforms: [ParentPlatform]
-  stores: [Store]
-  developers: [Developer]
-  genres: [Genre]
-  tags: [Tag]
+  alternative_names: string[]
+  parent_platforms: ParentPlatform[]
+  stores: Store[]
+  developers: Developer[]
+  genres: Genre[]
+  tags: Tag[]
   esrb_rating: ESRBRating
   clip: Clip
 }
@@ -85,7 +87,9 @@ interface PlatformDetail {
   image_background: string
 }
 
-type ParentPlatform = Pick<PlatformDetail, 'id' | 'name' | 'slug'>
+type ParentPlatform = {
+  platform: Pick<PlatformDetail, 'id' | 'name' | 'slug'> 
+} 
 
 interface Genre {
   id: number
@@ -146,6 +150,19 @@ export interface MyLibraryData {
 interface Library {
   games: GameCollections
   totalGames: number
+}
+export interface DatabaseGameData {
+  fetchGameData: DatabaseGame
+}
+interface DatabaseGame {
+  name: string
+  metacritic: number
+  released: string
+  background_image: string
+  parent_platforms: ParentPlatform[]
+  genres: Genre[]
+  tags: Tag[]
+  numberId: number
 }
 
 
