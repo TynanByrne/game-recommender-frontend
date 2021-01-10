@@ -20,11 +20,11 @@ const LibraryList: React.FC<ListProps> = ({ library }) => {
   const categories: GameCategory[] = ['wishlist', 'completed', 'unfinished', 'not started', 'playing']
   const newGameList: CategoriedGame[][] = gameList.map((gameArray, index) => {
     console.log(gameArray)
-     return gameArray.map(game => {
-       const newGame: CategoriedGame = { 
-         ...game, category: categories[index]
-        }
-       return newGame
+    return gameArray.map(game => {
+      const newGame: CategoriedGame = {
+        ...game, category: categories[index]
+      }
+      return newGame
     })
   })
   console.log(newGameList)
@@ -40,11 +40,11 @@ const LibraryList: React.FC<ListProps> = ({ library }) => {
     <>
       <List>
         {newGameList.flat().map(game => (
-        <LibraryItem
-          gameId={game._id}
-          key={game._id}
-          category={game.category} />
-      ) )}
+          <LibraryItem
+            gameId={game._id}
+            key={game._id}
+            category={game.category} />
+        ))}
       </List>
     </>
   )

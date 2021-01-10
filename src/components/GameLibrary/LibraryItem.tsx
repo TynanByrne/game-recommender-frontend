@@ -1,9 +1,10 @@
 import { useQuery } from '@apollo/client'
-import { Card, CardContent, CardMedia, CircularProgress, makeStyles, Typography } from '@material-ui/core'
+import { Box, Card, CardActionArea, CardContent, CardMedia, Chip, CircularProgress, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import { GET_DBGAME } from '../../graphql/queries'
 import { DatabaseGameData, GameCategory } from '../../types'
 import { IoLogoPlaystation } from 'react-icons/io'
+import { useHistory } from 'react-router-dom'
 
 interface Props {
   gameId: string
@@ -16,20 +17,35 @@ interface GameVars {
 const useStyles = makeStyles({
   root: {
     maxWidth: '60vh',
-    paddingVertical: '20px',
+    padding: '20px',
     display: 'flex',
-    flexWrap: 'nowrap'
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    justifyItems: 'center',
+    alignItems: 'center',
+    alignContent: 'stretch',
+    textAlign: 'center',
+    marginTop: '4rem'
   },
   media: {
-    flex: 2,
+    flex: 1,
+  },
+  data: {
+    flex: 0,
+    height: 'auto',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   mainContent: {
-    flex: 3,
+    flex: 2,
     display: 'flex',
     flexDirection: 'column',
   },
   title: {
     flex: 2,
+    width: 'auto',
   },
   extra: {
     flex: 1,
@@ -37,10 +53,10 @@ const useStyles = makeStyles({
   platforms: {
     flex: 1,
     display: 'flex',
-    margin: '20px'
+    flexDirection: 'column'
   },
   category: {
-    flex: 2,
+    flex: 1,
     margin: '20px'
   },
 
@@ -48,6 +64,7 @@ const useStyles = makeStyles({
 
 const LibraryItem: React.FC<Props> = ({ gameId, category }) => {
   const classes = useStyles()
+  const history = useHistory()
   const { data, loading } = useQuery<DatabaseGameData, GameVars>(GET_DBGAME, {
     variables: { gameId }
   })
@@ -68,43 +85,43 @@ const LibraryItem: React.FC<Props> = ({ gameId, category }) => {
   }
 
   return (
-    <Card className={classes.root}>
-      <CardMedia
-        className={classes.media}
-        component='img'
-        alt={game.name}
-        height='300'
-        image={game.background_image}
-      />
-      <CardContent className={classes.mainContent}>
-        <Typography className={classes.title} variant='h4'>
-          {game.name}
-        </Typography>
-        <Typography className={classes.extra} variant='body1'>
-          Released: {game.released} {game.metacritic && `| Metacritic: ${game.metacritic}`}
-        </Typography>
-      </CardContent>
-      <CardContent className={classes.platforms}>
-        {game.parent_platforms.map(p => {
-          if (p.platform.name === 'PlayStation') {
-            return (
-              <IoLogoPlaystation />
-            )
-          }
-          return (
-            <Typography variant='body1' key={p.platform.name}>
-              {p.platform.name}
+    <Card
+      className={classes.root}
+      onClick={() => history.push(`/games/singlegame/${game.numberId}`)}>
+      <CardActionArea>
+        <CardMedia
+          className={classes.media}
+          component='img'
+          alt={game.name}
+          height='300'
+          width='100%'
+          image={game.background_image}
+        />
+        <CardContent className={classes.data}>
+          <Box className={classes.mainContent}>
+            <Typography color='primary' className={classes.title} variant='h4'>
+              {game.name}
             </Typography>
-          )
-
-        })}
-      </CardContent>
-      <CardContent className={classes.category}>
-        <Typography variant='h5'>
-          {category}
-        </Typography>
-      </CardContent>
-
+            <Typography className={classes.extra} variant='body1'>
+              Released: {game.released} {game.metacritic && `| Metacritic: ${game.metacritic}`}
+            </Typography>
+          </Box>
+          <Box className={classes.platforms}>
+            {game.parent_platforms.map(p => {
+              console.log(p)
+              if (p.platform.name === 'PlayStation') {
+                return <IoLogoPlaystation />
+              }
+              return (
+                <Typography variant='body1' key={p.platform.name}>
+                  {p.platform.name}
+                </Typography>
+              )
+            })}
+          </Box>
+          <Chip className={classes.category} label={category} />
+        </CardContent>
+      </CardActionArea>
     </Card>
   )
 }
