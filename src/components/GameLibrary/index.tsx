@@ -12,6 +12,7 @@ interface LibraryVars {
 
 const GameLibrary: React.FC = () => {
   const meResult = useQuery<MeData>(ME)
+  console.log(meResult.data)
   const libraryResult = useQuery<MyLibraryData, LibraryVars>(GET_LIBRARY, {
     variables: { libraryId: meResult?.data?.me?.library || '' }
   })

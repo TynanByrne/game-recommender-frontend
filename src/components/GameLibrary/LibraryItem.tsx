@@ -2,11 +2,12 @@ import { useQuery } from '@apollo/client'
 import { Card, CardContent, CardMedia, CircularProgress, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import { GET_DBGAME } from '../../graphql/queries'
-import { DatabaseGameData } from '../../types'
+import { DatabaseGameData, GameCategory } from '../../types'
 import { IoLogoPlaystation } from 'react-icons/io'
 
 interface Props {
   gameId: string
+  category: GameCategory
 }
 interface GameVars {
   gameId: string
@@ -45,7 +46,7 @@ const useStyles = makeStyles({
 
 })
 
-const LibraryItem: React.FC<Props> = ({ gameId }) => {
+const LibraryItem: React.FC<Props> = ({ gameId, category }) => {
   const classes = useStyles()
   const { data, loading } = useQuery<DatabaseGameData, GameVars>(GET_DBGAME, {
     variables: { gameId }
@@ -72,30 +73,35 @@ const LibraryItem: React.FC<Props> = ({ gameId }) => {
         className={classes.media}
         component='img'
         alt={game.name}
-        height='200'
+        height='300'
         image={game.background_image}
       />
       <CardContent className={classes.mainContent}>
-        <Typography className={classes.title} variant='h2'>
+        <Typography className={classes.title} variant='h4'>
           {game.name}
         </Typography>
-        <Typography className={classes.extra} variant='h5'>
+        <Typography className={classes.extra} variant='body1'>
           Released: {game.released} {game.metacritic && `| Metacritic: ${game.metacritic}`}
         </Typography>
       </CardContent>
       <CardContent className={classes.platforms}>
         {game.parent_platforms.map(p => {
-          if (p.platform.name === 'Playstation') {
+          if (p.platform.name === 'PlayStation') {
             return (
               <IoLogoPlaystation />
             )
           }
-          return p.platform.name
+          return (
+            <Typography variant='body1' key={p.platform.name}>
+              {p.platform.name}
+            </Typography>
+          )
+
         })}
       </CardContent>
       <CardContent className={classes.category}>
         <Typography variant='h5'>
-          This is the category
+          {category}
         </Typography>
       </CardContent>
 
