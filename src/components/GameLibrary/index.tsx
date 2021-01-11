@@ -1,9 +1,10 @@
 import { useQuery } from '@apollo/client'
 import { CircularProgress, Typography } from '@material-ui/core'
-import React from 'react'
+import React, { useState } from 'react'
 import { GET_LIBRARY, ME } from '../../graphql/queries'
 import { MyLibraryData } from '../../types'
 import { MeData } from '../Home'
+import CategoryFilters from './CategoryFilters'
 import LibraryList from './LibraryList'
 
 interface LibraryVars {
@@ -15,6 +16,13 @@ const GameLibrary: React.FC = () => {
   console.log(meResult.data)
   const libraryResult = useQuery<MyLibraryData, LibraryVars>(GET_LIBRARY, {
     variables: { libraryId: meResult?.data?.me?.library || '' }
+  })
+  const [categories, setCategories] = useState({
+    playing: true,
+    unfinished: true,
+    notStarted: true,
+    completed: true,
+    wishlist: true,
   })
 
   if (libraryResult.loading) {
@@ -37,7 +45,8 @@ const GameLibrary: React.FC = () => {
           This is your game library
         </Typography>
         <br />
-        <LibraryList library={library} />
+        <CategoryFilters categories={categories} setCategories={setCategories} />
+        <LibraryList library={library} categoryState={categories} />
       </>
     )
   }

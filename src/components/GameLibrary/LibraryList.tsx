@@ -3,8 +3,17 @@ import React from 'react'
 import { GameCategory, GameCollections, GameObjectID } from '../../types'
 import LibraryItem from './LibraryItem'
 
+
+interface CategoryState {
+  playing: boolean;
+  unfinished: boolean;
+  notStarted: boolean;
+  completed: boolean;
+  wishlist: boolean;
+}
 interface ListProps {
   library: GameCollections
+  categoryState: CategoryState
 }
 
 interface CategoriedGame {
@@ -12,9 +21,26 @@ interface CategoriedGame {
   category: GameCategory
 }
 
+const categoryFilter = (game: CategoriedGame, categoryState: CategoryState): boolean => {
+  switch (game.category) {
+    case 'completed':
+      return categoryState.completed
+    case 'not started':
+      return categoryState.notStarted
+    case 'playing':
+      return categoryState.playing
+    case 'unfinished':
+      return categoryState.unfinished
+    case 'wishlist':
+      return categoryState.wishlist
+    default:
+      return false
+  }
+}
 
 
-const LibraryList: React.FC<ListProps> = ({ library }) => {
+
+const LibraryList: React.FC<ListProps> = ({ library, categoryState }) => {
   const gameList: GameObjectID[][] = Object.values(library)
   gameList.shift()
   const categories: GameCategory[] = ['wishlist', 'completed', 'unfinished', 'not started', 'playing']
@@ -39,7 +65,7 @@ const LibraryList: React.FC<ListProps> = ({ library }) => {
   return (
     <>
       <List>
-        {newGameList.flat().map(game => (
+        {newGameList.flat().filter(game => categoryFilter(game, categoryState)).map(game => (
           <LibraryItem
             gameId={game._id}
             key={game._id}
