@@ -3,8 +3,13 @@ import { Box, Card, CardActionArea, CardContent, CardMedia, Chip, CircularProgre
 import React from 'react'
 import { GET_DBGAME } from '../../graphql/queries'
 import { DatabaseGameData, GameCategory } from '../../types'
-import { IoLogoPlaystation } from 'react-icons/io'
+import { IoLogoAndroid, IoLogoApple, IoLogoPlaystation, IoLogoXbox } from 'react-icons/io'
+import { HiDesktopComputer } from 'react-icons/hi'
+import { SiNintendo, SiIos } from 'react-icons/si'
+import { FcLinux } from 'react-icons/fc'
 import { useHistory } from 'react-router-dom'
+import { IconType } from 'react-icons'
+import { androidGreen, cyberpunkYellow, nintendoRed, playstationBlue, xboxGreen } from '../../theme'
 
 interface Props {
   gameId: string
@@ -53,14 +58,40 @@ const useStyles = makeStyles({
   platforms: {
     flex: 1,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    alignContent: 'center',
+    flexWrap: 'wrap',
   },
   category: {
     flex: 1,
     margin: '20px'
   },
-
 })
+
+const platformIcon = (platformName: string): IconType | JSX.Element => {
+  switch (platformName) {
+    case 'PlayStation':
+      return <IoLogoPlaystation color={playstationBlue} size='1.5rem' />
+    case 'Xbox':
+      return <IoLogoXbox color={xboxGreen} size='1.5rem' />
+    case 'PC':
+      return <HiDesktopComputer color={cyberpunkYellow} size='1.5rem' aria-label={platformName} />
+    case 'Linux':
+      return <FcLinux size='1.5rem' />
+    case 'Apple Macintosh':
+      return <IoLogoApple color='#FFFFFF' size='1.5rem' />
+    case 'Nintendo':
+      return <SiNintendo color={nintendoRed} size='1.5rem' />
+    case 'Android':
+      return <IoLogoAndroid color={androidGreen} size='1.5rem' />
+    case 'iOS':
+      return <SiIos color='#FFFFFF' size='1.5rem' aria-label={platformName} />
+    default:
+      return <Typography variant='body1'>{platformName}</Typography>
+  }
+}
 
 const LibraryItem: React.FC<Props> = ({ gameId, category }) => {
   const classes = useStyles()
@@ -109,15 +140,8 @@ const LibraryItem: React.FC<Props> = ({ gameId, category }) => {
           </Box>
           <Box className={classes.platforms}>
             {game.parent_platforms.map(p => {
-              console.log(p)
-              if (p.platform.name === 'PlayStation') {
-                return <IoLogoPlaystation />
-              }
-              return (
-                <Typography variant='body1' key={p.platform.name}>
-                  {p.platform.name}
-                </Typography>
-              )
+              const icon = platformIcon(p.platform.name)
+              return <Box key={p.platform.id}>{icon}</Box>
             })}
           </Box>
           <Chip className={classes.category} label={category} />
