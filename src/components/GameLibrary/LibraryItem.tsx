@@ -14,6 +14,7 @@ import { androidGreen, cyberpunkYellow, nintendoRed, playstationBlue, xboxGreen 
 interface Props {
   gameId: string
   category: GameCategory
+  search: string
 }
 interface GameVars {
   gameId: string
@@ -93,7 +94,7 @@ const platformIcon = (platformName: string): IconType | JSX.Element => {
   }
 }
 
-const LibraryItem: React.FC<Props> = ({ gameId, category }) => {
+const LibraryItem: React.FC<Props> = ({ gameId, category, search }) => {
   const classes = useStyles()
   const history = useHistory()
   const { data, loading } = useQuery<DatabaseGameData, GameVars>(GET_DBGAME, {
@@ -115,6 +116,7 @@ const LibraryItem: React.FC<Props> = ({ gameId, category }) => {
       <CircularProgress size='40vh' />
     )
   }
+  if (!game.name.toLowerCase().includes(search.toLowerCase())) return null
 
   return (
     <Card
@@ -126,7 +128,6 @@ const LibraryItem: React.FC<Props> = ({ gameId, category }) => {
           component='img'
           alt={game.name}
           height='300'
-          width='100%'
           image={game.background_image}
         />
         <CardContent className={classes.data}>

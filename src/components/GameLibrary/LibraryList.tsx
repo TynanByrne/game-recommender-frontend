@@ -1,10 +1,10 @@
-import { List, Typography } from '@material-ui/core'
+import { List, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import { GameCategory, GameCollections, GameObjectID } from '../../types'
 import LibraryItem from './LibraryItem'
 
 
-interface CategoryState {
+export interface CategoryState {
   playing: boolean;
   unfinished: boolean;
   notStarted: boolean;
@@ -14,6 +14,7 @@ interface CategoryState {
 interface ListProps {
   library: GameCollections
   categoryState: CategoryState
+  search: string
 }
 
 interface CategoriedGame {
@@ -38,9 +39,16 @@ const categoryFilter = (game: CategoriedGame, categoryState: CategoryState): boo
   }
 }
 
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  }
+})
 
-
-const LibraryList: React.FC<ListProps> = ({ library, categoryState }) => {
+const LibraryList: React.FC<ListProps> = ({ library, categoryState, search }) => {
+  const classes = useStyles()
   const gameList: GameObjectID[][] = Object.values(library)
   gameList.shift()
   const categories: GameCategory[] = ['wishlist', 'completed', 'unfinished', 'not started', 'playing']
@@ -64,13 +72,17 @@ const LibraryList: React.FC<ListProps> = ({ library, categoryState }) => {
 
   return (
     <>
-      <List>
-        {newGameList.flat().filter(game => categoryFilter(game, categoryState)).map(game => (
-          <LibraryItem
-            gameId={game._id}
-            key={game._id}
-            category={game.category} />
-        ))}
+      <List className={classes.root}>
+        {newGameList
+          .flat()
+          .filter(game => categoryFilter(game, categoryState))
+          .map(game => (
+            <LibraryItem
+              gameId={game._id}
+              key={game._id}
+              category={game.category}
+              search={search} />
+          ))}
       </List>
     </>
   )

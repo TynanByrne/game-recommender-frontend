@@ -24,6 +24,7 @@ const GameLibrary: React.FC = () => {
     completed: true,
     wishlist: true,
   })
+  const [search, setSearch] = useState<string>('')
 
   if (libraryResult.loading) {
     return (
@@ -45,8 +46,15 @@ const GameLibrary: React.FC = () => {
           This is your game library
         </Typography>
         <br />
-        <CategoryFilters categories={categories} setCategories={setCategories} />
-        <LibraryList library={library} categoryState={categories} />
+        <CategoryFilters
+          categories={categories}
+          setCategories={setCategories}
+          setSearch={setSearch}
+          search={search} />
+        <LibraryList
+          library={library}
+          categoryState={categories}
+          search={search} />
       </>
     )
   }
