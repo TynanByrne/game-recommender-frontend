@@ -70,6 +70,7 @@ const LibraryItem: React.FC<Props> = ({ gameId, category }) => {
   })
 
   const game = data?.fetchGameData
+  console.log(game)
 
   if (!game) {
     return (

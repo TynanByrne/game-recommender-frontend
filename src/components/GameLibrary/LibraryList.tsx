@@ -28,7 +28,7 @@ const LibraryList: React.FC<ListProps> = ({ library }) => {
     })
   })
   console.log(newGameList)
-  if (newGameList.length === 0) {
+  if (newGameList.flat().length === 0) {
     return (
       <Typography variant='h5'>
         This list is empty!
