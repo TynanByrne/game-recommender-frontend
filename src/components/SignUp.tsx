@@ -70,7 +70,7 @@ const SignUp: React.FC = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting} ) => {
+        onSubmit={(values, { setSubmitting } ) => {
           const { username, password } = values
           try {
             signUpAndIn(username, password)

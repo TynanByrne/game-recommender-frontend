@@ -126,3 +126,21 @@ export const LIBRARY_GAMES = gql`
       totalGames
   }
 `
+
+export const POST_DETAILS = gql`
+  fragment PostDetails on Post {
+    poster
+    text
+    platforms
+    games
+    recommendations {
+      recommender
+      games
+      text
+      comments {
+        commenter
+        text
+      }
+    }
+  }
+`

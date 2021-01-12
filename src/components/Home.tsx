@@ -5,6 +5,7 @@ import React from 'react'
 import { loggedInVar } from '../graphql/cache'
 import { ME } from '../graphql/queries'
 import { User } from '../types'
+import PostFeed from './PostFeed'
 
 export interface MeData {
   me: User
@@ -36,6 +37,7 @@ const Home: React.FC = () => {
           Welcome back, {data.me.username}!
         </Alert>
       )}
+      <PostFeed />
     </>
   )
 }

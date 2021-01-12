@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { LIBRARY_GAMES } from '../fragments'
+import { LIBRARY_GAMES, POST_DETAILS } from '../fragments'
 
 export const SIGN_UP = gql`
   mutation addUser($username: String!, $password: String!) {
@@ -57,4 +57,23 @@ export const REMOVE_GAME = gql`
     }
   }
   ${LIBRARY_GAMES}
+`
+
+export const NEW_POST = gql`
+  mutation newPost(
+    $username: String!,
+    $text: String!,
+    $games: [String],
+    $platforms: [String]
+  ) {
+    newPost(
+      username: $username,
+      text: $text,
+      games: $games,
+      platforms: $platforms,
+    ) {
+      ...PostDetails
+    }
+  }
+  ${POST_DETAILS}
 `
