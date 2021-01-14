@@ -9,6 +9,10 @@ import { MeData } from '../Home'
 import NewPostForm from './NewPostForm'
 
 const validationSchema = yup.object().shape({
+  title: yup
+    .string()
+    .max(50, 'Your title can not be longer than 50 characters.')
+    .required('You need to provide a title'),
   text: yup
     .string()
     .max(200, 'You cannot write more than 200 characters in a post.')
@@ -23,12 +27,14 @@ const validationSchema = yup.object().shape({
 })
 
 interface PostFormValues {
+  title: string
   text: string
   games: string[]
   platforms: string[]
 }
 
 const initialValues: PostFormValues = {
+  title: '',
   text: '',
   games: [],
   platforms: [],
@@ -40,12 +46,13 @@ const NewPost: React.FC = () => {
   if (meResult.loading) return <CircularProgress size='50%' />
 
   const createPost = async (
-    text: string, games: string[], platforms: string[]
+    title: string, text: string, games: string[], platforms: string[]
   ) => {
     try {
       const postResult = await newPost({
         variables: {
           username: meResult.data?.me.username,
+          title,
           text,
           games,
           platforms,
@@ -66,9 +73,9 @@ const NewPost: React.FC = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
-          const { text, games, platforms } = values
+          const { title, text, games, platforms } = values
           setSubmitting(true)
-          createPost(text, games, platforms)
+          createPost(title, text, games, platforms)
           setSubmitting(false)
         }}>
         {({ submitForm, isSubmitting }) => (

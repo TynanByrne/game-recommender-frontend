@@ -1,7 +1,9 @@
-import { Button, Checkbox, Input, LinearProgress, ListItemText, MenuItem, Select } from '@material-ui/core'
-import { TextField } from 'formik-material-ui'
+import { Box, Button, Checkbox, Chip, Input, LinearProgress, ListItemText, MenuItem } from '@material-ui/core'
+import { TextField, Select } from 'formik-material-ui'
 import { Field, Form } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
+import { platformIcon } from '../GameLibrary/LibraryItem'
+import SmallSearchbar from './SmallSearchbar'
 
 interface FormProps {
   isSubmitting: boolean
@@ -21,49 +23,75 @@ const platformOptions = [
 ]
 
 const NewPostForm: React.FC<FormProps> = ({ isSubmitting, submitForm }) => {
-  const [platforms, setPlatforms] = React.useState<string[]>([]);
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setPlatforms(event.target.value as string[])
-  };
+  const [platforms, setPlatforms] = useState<string[]>([])
   return (
-    <Form>
-      <Field
-        component={TextField}
-        type='text'
-        name='text'
-        multiline
-        fullWidth
-        label='Recommendation request (140 characters max)' />
-      <Field
-        component={Select}
-        multiple
-        label='Platforms'
-        value={platforms}
-        onChange={handleChange}
-        input={<Input />}
-        renderValue={(selected: string[]) => (selected as string[]).join(', ')}
-      >
-        {platformOptions.map(platform => (
-          <MenuItem key={platform} value={platform}>
-            <Checkbox checked={platforms.includes(platform)} />
-            <ListItemText primary={platform} />
-          </MenuItem>
-        ))}
-      </Field>
-      {isSubmitting && <LinearProgress />}
-      <Button
-        color='primary'
-        variant='contained'
-        onClick={submitForm}
-        disabled={isSubmitting}
-        type='button'
-      >
-        Post recommendation request
+    <>
+      <Form>
+        <Field
+          component={TextField}
+          type='text'
+          name='title'
+          fullWidth
+          label='Post title' />
+        <Field
+          component={TextField}
+          type='text'
+          name='text'
+          multiline
+          fullWidth
+          label='Recommendation request (140 characters max)' />
+        <Field
+          component={Select}
+          multiple
+          type='text'
+          name='platforms'
+          label='Platforms'
+          fullWidth
+          input={<Input />}
+          renderValue={(selected: string[]) => {
+            setPlatforms(selected)
+            return selected.map(v => (
+              <Box key={v}>{platformIcon(v)}</Box>
+            ))
+          }}
+        >
+          {platformOptions.map(platform => (
+            <MenuItem key={platform} value={platform}>
+              <Checkbox checked={platforms.includes(platform)} />
+              <ListItemText primary={platform} />
+            </MenuItem>
+          ))}
+        </Field>
+        <Field
+          component={Select}
+          multiple
+          type='text'
+          name='games'
+          label='Similar games'
+          fullWidth
+          input={<Input />}
+          renderValue={(selected: string[]) => (
+            <Box>
+              {selected.map(game => (
+                <Chip key={game} label={game} />
+              ))}
+            </Box>
+          )}
+        >
+          <SmallSearchbar />
+        </Field>
+        {isSubmitting && <LinearProgress />}
+        <Button
+          color='primary'
+          variant='contained'
+          onClick={submitForm}
+          disabled={isSubmitting}
+          type='button'
+        >
+          Post recommendation request
       </Button>
-
-
-    </Form>
+      </Form>
+    </>
   )
 }
 

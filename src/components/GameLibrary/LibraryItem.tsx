@@ -71,7 +71,7 @@ const useStyles = makeStyles({
   },
 })
 
-const platformIcon = (platformName: string): IconType | JSX.Element => {
+export const platformIcon = (platformName: string): IconType | JSX.Element => {
   switch (platformName) {
     case 'PlayStation':
       return <IoLogoPlaystation color={playstationBlue} size='1.5rem' />

@@ -62,12 +62,14 @@ export const REMOVE_GAME = gql`
 export const NEW_POST = gql`
   mutation newPost(
     $username: String!,
+    $title: String!
     $text: String!,
     $games: [String],
     $platforms: [String]
   ) {
     newPost(
       username: $username,
+      title: $title,
       text: $text,
       games: $games,
       platforms: $platforms,
