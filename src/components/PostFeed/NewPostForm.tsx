@@ -62,24 +62,7 @@ const NewPostForm: React.FC<FormProps> = ({ isSubmitting, submitForm }) => {
             </MenuItem>
           ))}
         </Field>
-        <Field
-          component={Select}
-          multiple
-          type='text'
-          name='games'
-          label='Similar games'
-          fullWidth
-          input={<Input />}
-          renderValue={(selected: string[]) => (
-            <Box>
-              {selected.map(game => (
-                <Chip key={game} label={game} />
-              ))}
-            </Box>
-          )}
-        >
-          <SmallSearchbar />
-        </Field>
+        {/* Have a hidden field and have the form submit that! */}
         {isSubmitting && <LinearProgress />}
         <Button
           color='primary'

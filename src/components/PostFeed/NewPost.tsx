@@ -17,10 +17,12 @@ const validationSchema = yup.object().shape({
     .string()
     .max(200, 'You cannot write more than 200 characters in a post.')
     .required('You need to give information about what you\'re looking for.'),
-  games: yup
-    .array()
-    .of(yup.string().length(24))
-    .max(3, 'You cannot choose more than 3 games to base your recommendations from.'),
+  game1: yup
+    .string(),
+  game2: yup
+    .string(),
+  game3: yup
+    .string(),
   platforms: yup
     .array()
     .of(yup.string())
@@ -29,14 +31,18 @@ const validationSchema = yup.object().shape({
 interface PostFormValues {
   title: string
   text: string
-  games: string[]
+  game1: string | undefined
+  game2: string | undefined
+  game3: string | undefined
   platforms: string[]
 }
 
 const initialValues: PostFormValues = {
   title: '',
   text: '',
-  games: [],
+  game1: '',
+  game2: '',
+  game3: '',
   platforms: [],
 }
 
@@ -46,7 +52,7 @@ const NewPost: React.FC = () => {
   if (meResult.loading) return <CircularProgress size='50%' />
 
   const createPost = async (
-    title: string, text: string, games: string[], platforms: string[]
+    title: string, text: string, game1: string | undefined, game2: string | undefined, game3: string | undefined, platforms: string[]
   ) => {
     try {
       const postResult = await newPost({
@@ -54,7 +60,7 @@ const NewPost: React.FC = () => {
           username: meResult.data?.me.username,
           title,
           text,
-          games,
+          games: [game1, game2, game3],
           platforms,
         }
       })
@@ -73,9 +79,9 @@ const NewPost: React.FC = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
-          const { title, text, games, platforms } = values
+          const { title, text, game1, game2, game3, platforms } = values
           setSubmitting(true)
-          createPost(title, text, games, platforms)
+          createPost(title, text, game1, game2, game3, platforms)
           setSubmitting(false)
         }}>
         {({ submitForm, isSubmitting }) => (
