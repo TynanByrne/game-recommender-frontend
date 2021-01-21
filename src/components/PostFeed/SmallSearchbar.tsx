@@ -1,5 +1,5 @@
 import { useLazyQuery } from '@apollo/client'
-import { CircularProgress, ListItemText, MenuItem, TextField } from '@material-ui/core'
+import { Button, CircularProgress, ListItemText, MenuItem, TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { SEARCH_GAMES } from '../../graphql/queries'
 import { SearchedGamesData, SearchedGamesVars } from '../../types'
@@ -24,7 +24,6 @@ const SmallSearchbar: React.FC = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
     setSearch(event.target.value)
-    searchGames()
   }
 
   return (
@@ -33,6 +32,7 @@ const SmallSearchbar: React.FC = () => {
         value={search}
         onChange={handleInputChange}
         label='Search games' />
+      <Button onClick={() => searchGames()}>search</Button>
       {loading && <CircularProgress />}
       {games.map(game => (
         <MenuItem key={game} value={game}>

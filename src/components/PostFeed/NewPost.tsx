@@ -17,12 +17,8 @@ const validationSchema = yup.object().shape({
     .string()
     .max(200, 'You cannot write more than 200 characters in a post.')
     .required('You need to give information about what you\'re looking for.'),
-  game1: yup
-    .string(),
-  game2: yup
-    .string(),
-  game3: yup
-    .string(),
+  game: yup
+    .number(),
   platforms: yup
     .array()
     .of(yup.string())
@@ -31,18 +27,14 @@ const validationSchema = yup.object().shape({
 interface PostFormValues {
   title: string
   text: string
-  game1: string | undefined
-  game2: string | undefined
-  game3: string | undefined
+  game: number
   platforms: string[]
 }
 
 const initialValues: PostFormValues = {
   title: '',
   text: '',
-  game1: '',
-  game2: '',
-  game3: '',
+  game: -1,
   platforms: [],
 }
 
@@ -52,7 +44,10 @@ const NewPost: React.FC = () => {
   if (meResult.loading) return <CircularProgress size='50%' />
 
   const createPost = async (
-    title: string, text: string, game1: string | undefined, game2: string | undefined, game3: string | undefined, platforms: string[]
+    title: string,
+    text: string,
+    game: number,
+    platforms: string[],
   ) => {
     try {
       const postResult = await newPost({
@@ -60,7 +55,7 @@ const NewPost: React.FC = () => {
           username: meResult.data?.me.username,
           title,
           text,
-          games: [game1, game2, game3],
+          game,
           platforms,
         }
       })
@@ -79,9 +74,10 @@ const NewPost: React.FC = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
-          const { title, text, game1, game2, game3, platforms } = values
+          const { title, text, game, platforms } = values
+          console.log("game is", game)
           setSubmitting(true)
-          createPost(title, text, game1, game2, game3, platforms)
+          createPost(title, text, game, platforms)
           setSubmitting(false)
         }}>
         {({ submitForm, isSubmitting }) => (
