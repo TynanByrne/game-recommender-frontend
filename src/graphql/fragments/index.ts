@@ -132,10 +132,10 @@ export const POST_DETAILS = gql`
     poster
     text
     platforms
-    games
+    game
     recommendations {
       recommender
-      games
+      game
       text
       comments {
         commenter

@@ -77,7 +77,7 @@ const NewPost: React.FC = () => {
           const { title, text, game, platforms } = values
           console.log("game is", game)
           setSubmitting(true)
-          createPost(title, text, game, platforms)
+          createPost(title, text, Number(game), platforms)
           setSubmitting(false)
         }}>
         {({ submitForm, isSubmitting }) => (

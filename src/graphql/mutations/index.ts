@@ -64,14 +64,14 @@ export const NEW_POST = gql`
     $username: String!,
     $title: String!
     $text: String!,
-    $games: [String],
+    $game: Int,
     $platforms: [String]
   ) {
     newPost(
       username: $username,
       title: $title,
       text: $text,
-      games: $games,
+      game: $game,
       platforms: $platforms,
     ) {
       ...PostDetails
