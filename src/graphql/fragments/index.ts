@@ -130,6 +130,7 @@ export const LIBRARY_GAMES = gql`
 export const POST_DETAILS = gql`
   fragment PostDetails on Post {
     poster
+    title
     text
     platforms
     game
@@ -142,5 +143,15 @@ export const POST_DETAILS = gql`
         text
       }
     }
+    timestamp
+  }
+`
+
+export const USER_DETAILS = gql`
+  fragment UserDetails on User {
+    id
+    username
+    passwordHash
+    library
   }
 `

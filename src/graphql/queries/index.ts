@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { DATABASE_GAME, GAME_BASICS, LIBRARY_GAMES, SINGLE_GAME } from '../fragments'
+import { DATABASE_GAME, GAME_BASICS, LIBRARY_GAMES, POST_DETAILS, SINGLE_GAME, USER_DETAILS } from '../fragments'
 
 export const SEARCH_GAMES = gql`
   query searchGames($searchTerm: String!) {
@@ -76,4 +76,22 @@ export const GET_GAME_OBJECTID = gql`
   query fetchGameObjectId($gameRawgId: Int!) {
     fetchGameObjectId(gameRawgId: $gameRawgId)
   }
+`
+
+export const GET_POSTS = gql`
+  query allPosts {
+    allPosts {
+      ...PostDetails
+    }
+  }
+  ${POST_DETAILS}
+`
+
+export const GET_USER = gql`
+  query getUser($userId: String!) {
+    getUser(userId: $userId) {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
 `

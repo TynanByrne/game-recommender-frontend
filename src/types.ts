@@ -1,5 +1,3 @@
-import { StringSchema } from "yup"
-
 export interface SearchedGames {
   count: number
   next: string
@@ -165,5 +163,29 @@ interface DatabaseGame {
   numberId: number
 }
 
-
 export type GameCategory = 'unfinished' | 'wishlist' | 'not started' | 'playing' | 'completed'
+
+export interface Post {
+  _id: string
+  platforms: string[]
+  poster: string
+  title: string
+  text: string
+  game: string
+  recommendations: Recommendation[]
+  timestamp: Date
+}
+interface Recommendation {
+  recommender: string
+  game: string
+  text: string
+  likes: number
+  comments: Comment[]
+  timestamp: string
+}
+interface Comment {
+  commenter: string
+  text: string
+  likes: string
+  timestamp: string
+}

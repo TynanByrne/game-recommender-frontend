@@ -71,7 +71,7 @@ const NewPostForm: React.FC<FormProps> = ({ isSubmitting, submitForm }) => {
           renderValue={(selected: string[]) => {
             setPlatforms(selected)
             return selected.map(v => (
-              <Box key={v}>{platformIcon(v)}</Box>
+              <span key={v}>{platformIcon(v)}</span>
             ))
           }}
         >
