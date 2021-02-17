@@ -189,3 +189,10 @@ interface Comment {
   likes: string
   timestamp: string
 }
+
+export interface SinglePostData {
+  getPost: Post
+}
+export interface SinglePostVars {
+  postId: string
+}

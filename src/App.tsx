@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import SearchResults from './components/SearchResults';
 import SignUp from './components/SignUp';
 import SingleGame from './components/SingleGame';
+import SinglePost from './components/SinglePost';
 
 const App: React.FC = () => {
   return (
@@ -29,6 +30,9 @@ const App: React.FC = () => {
           </Route>
           <Route path='/login'>
             <Login />
+          </Route>
+          <Route path='/posts/:id'>
+            <SinglePost />
           </Route>
           <Route path='/'>
             <Home />

@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Box, Card, CardContent, CardHeader, CardMedia, CircularProgress, Divider, makeStyles, Typography } from '@material-ui/core'
+import { Box, Card, CardActionArea, CardContent, CardHeader, CardMedia, CircularProgress, Divider, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import { GET_DBGAME, GET_USER } from '../../graphql/queries'
 import { DatabaseGameData, Post, User } from '../../types'
@@ -11,13 +11,13 @@ interface Props {
   post: Post
 }
 
-interface GameVars {
+export interface GameVars {
   gameId: string
 }
-interface UserData {
+export interface UserData {
   getUser: User
 }
-interface UserVars {
+export interface UserVars {
   userId: string
 }
 
@@ -61,40 +61,42 @@ const PostItem: React.FC<Props> = ({ post }) => {
   return (
     <Card
       className={classes.root}
-      onClick={() => history.push(`posts/${post._id}`)}>
-      <CardHeader
-        className={classes.header}
-        title={post.title}
-        subheader={
-          `Posted by: ${posterResult.data?.getUser.username} ${formatDistanceToNow(new Date(post.timestamp))} ago`
-        }
-      />
-      {post.game && <CardMedia
-        component='img'
-        alt={dbGameResult.data?.fetchGameData.name}
-        height='150'
-        width='50vw'
-        image={dbGameResult.data?.fetchGameData.background_image}
-      />}
-      <CardContent>
-        <Box>
-          {post.game && <Typography variant='caption'>
-            User has played: {dbGameResult.data?.fetchGameData.name}
-          </Typography>}
-        </Box>
-        <Box>
-          <Typography variant='caption'>
-            Desired platforms: {post.platforms.map(p => platformIcon(p))}
+      onClick={() => history.push(`/posts/${post._id}`)}>
+      <CardActionArea>
+        <CardHeader
+          className={classes.header}
+          title={post.title}
+          subheader={
+            `Posted by: ${posterResult.data?.getUser.username} ${formatDistanceToNow(new Date(post.timestamp))} ago`
+          }
+        />
+        {post.game && <CardMedia
+          component='img'
+          alt={dbGameResult.data?.fetchGameData.name}
+          height='150'
+          width='50vw'
+          image={dbGameResult.data?.fetchGameData.background_image}
+        />}
+        <CardContent>
+          <Box>
+            {post.game && <Typography variant='caption'>
+              User has played: {dbGameResult.data?.fetchGameData.name}
+            </Typography>}
+          </Box>
+          <Box>
+            <Typography variant='caption'>
+              Desired platforms: {post.platforms.map(p => platformIcon(p))}
+            </Typography>
+          </Box>
+          <Divider light variant='fullWidth' className={classes.divider} />
+          <Typography variant='body1'>
+            {post.text}
           </Typography>
-        </Box>
-        <Divider light variant='fullWidth' className={classes.divider} />
-        <Typography variant='body1'>
-          {post.text}
+          <Typography variant='body2'>
+            {post.recommendations.length} recommendations
         </Typography>
-        <Typography variant='body2'>
-          {post.recommendations.length} recommendations
-        </Typography>
-      </CardContent>
+        </CardContent>
+      </CardActionArea>
     </Card>
   )
 }

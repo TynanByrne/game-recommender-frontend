@@ -95,3 +95,12 @@ export const GET_USER = gql`
   }
   ${USER_DETAILS}
 `
+
+export const GET_POST = gql`
+  query getPost($postId: String!) {
+    getPost(postId: $postId) {
+      ...PostDetails
+    }
+  }
+  ${POST_DETAILS}
+`

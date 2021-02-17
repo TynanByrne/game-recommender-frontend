@@ -129,6 +129,7 @@ export const LIBRARY_GAMES = gql`
 
 export const POST_DETAILS = gql`
   fragment PostDetails on Post {
+    _id
     poster
     title
     text
