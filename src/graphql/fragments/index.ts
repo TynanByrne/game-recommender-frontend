@@ -143,6 +143,7 @@ export const POST_DETAILS = gql`
         commenter
         text
       }
+      timestamp
     }
     timestamp
   }

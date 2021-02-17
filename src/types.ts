@@ -175,13 +175,14 @@ export interface Post {
   recommendations: Recommendation[]
   timestamp: Date
 }
-interface Recommendation {
+export interface Recommendation {
   recommender: string
-  game: string
+  game: number
   text: string
   likes: number
   comments: Comment[]
-  timestamp: string
+  timestamp: Date
+  id: string
 }
 interface Comment {
   commenter: string

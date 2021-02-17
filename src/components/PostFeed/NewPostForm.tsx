@@ -3,7 +3,6 @@ import { TextField as FormikTextField, Select as FormikSelect } from 'formik-mat
 import { Field, Form } from 'formik'
 import React, { useState } from 'react'
 import { platformIcon } from '../GameLibrary/LibraryItem'
-import SmallSearchbar from './SmallSearchbar'
 import { useLazyQuery } from '@apollo/client'
 import { SearchedGamesData, SearchedGamesVars } from '../../types'
 import { SEARCH_GAMES } from '../../graphql/queries'
@@ -113,7 +112,6 @@ const NewPostForm: React.FC<FormProps> = ({ isSubmitting, submitForm }) => {
           Post recommendation request
         </Button>
       </Form>
-      <div>{game}</div>
     </>
   )
 }

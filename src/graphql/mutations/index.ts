@@ -79,3 +79,22 @@ export const NEW_POST = gql`
   }
   ${POST_DETAILS}
 `
+
+export const NEW_RECOMMENDATION = gql`
+  mutation newRecommendation(
+    $username: String!,
+    $game: Int!,
+    $text: String!,
+    $postId: String!
+  ) {
+    newRecommendation(
+      username: $username,
+      game: $game,
+      text: $text,
+      postId: $postId
+    ) {
+      ...PostDetails
+    }
+  }
+  ${POST_DETAILS}
+`

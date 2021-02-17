@@ -7,10 +7,13 @@ import { platformIcon } from '../GameLibrary/LibraryItem'
 import { Link } from 'react-router-dom'
 import { GameVars, UserData, UserVars } from '../PostFeed/PostItem'
 import { formatDistanceToNow } from 'date-fns'
+import NewRecommendation from './NewRecommendation'
+import RecommendationItem from './RecommendationItem'
 
 interface PostProps {
   post: Post
 }
+
 
 const useStyles = makeStyles({
   root: {
@@ -70,6 +73,12 @@ const FullPost: React.FC<PostProps> = ({ post }) => {
             {post.text}
           </Typography>
         </Paper>
+        <NewRecommendation post={post} />
+        {post.recommendations.map(recommendation => (
+          <RecommendationItem
+            recommendation={recommendation}
+            key={recommendation.id} />
+        ))}
       </Box>
     </Paper>
   )
