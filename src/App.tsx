@@ -11,6 +11,7 @@ import SingleGame from './components/SingleGame';
 import SinglePost from './components/SinglePost';
 
 const App: React.FC = () => {
+  console.log('finish this!!')
   return (
     <CssBaseline>
       <NavBar />
